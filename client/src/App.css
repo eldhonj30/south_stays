@@ -1,0 +1,20 @@
+
+.customModal {
+  background: #b2dbbf;
+  max-width: 250px;
+  width: 30%;
+}
+
+.customButton {
+  margin-top: 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.navlink-active {
+  background-color: #4b87f0; 
+}
+
+.profileModal {
+  background-color: rgba(31, 31, 31, 0.5); 
+}
