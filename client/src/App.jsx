@@ -23,6 +23,7 @@ import PlaceDetails from './pages/Userpages/PlaceDetails';
 import BookingDetailsPage from './pages/Userpages/BookingDetailsPage';
 import HostBookingsPage from './pages/HostPages/HostBookingsPage';
 import SuccessPage from './pages/Userpages/SuccessPage';
+import MessagePage from './pages/Userpages/MessagePage';
 
 
 const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
@@ -40,12 +41,16 @@ function App() {
           <Route index element={<IndexPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path='/placedetails/:id' element={<PlaceDetails/>} />
+          <Route path="/placedetails/:id" element={<PlaceDetails />} />
 
           <Route path="" element={<UserPrivateRoute />}>
             <Route path="/profile/:subpage?" element={<ProfilePage />} />
-            <Route path='/profile/bookings/:id' element={<BookingDetailsPage />} />
-            <Route path='/profile/success' element={<SuccessPage />} />
+            <Route
+              path="/profile/bookings/:id"
+              element={<BookingDetailsPage />}
+            />
+            <Route path="/profile/success" element={<SuccessPage />} />
+            <Route path="/message" element={<MessagePage />} />
           </Route>
 
           <Route path="/host" element={<Home />} />
@@ -56,7 +61,7 @@ function App() {
             <Route path="/host/addplaces" element={<AddPlaces />} />
             <Route path="/host/listings" element={<PlaceListingPage />} />
             <Route path="/host/editplace/:id" element={<AddPlaces />} />
-            <Route path='/host/bookings' element={<HostBookingsPage />} />
+            <Route path="/host/bookings" element={<HostBookingsPage />} />
           </Route>
 
           <Route path="/admin/login" element={<AdminLogin />} />

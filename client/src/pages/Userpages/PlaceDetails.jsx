@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,Link } from "react-router-dom";
 import AddressLink from "../../components/UserComponents/AdressLink";
 import PlaceGallery from "../../components/UserComponents/PlaceGallery";
 import BookingWidget from "../../components/UserComponents/BookingWidget";
@@ -20,15 +20,15 @@ function PlaceDetails() {
       setPlace(response.data);
     });
   }, []);
-   useEffect(() => {
-     axios
-       .get(`/guest/booked-dates?place=${id}`)
-       .then(({ data }) => setBookings([...data]))
-       .catch((error) => console.error("Error:", error));
-   }, []);
-   const toparent = (newState) => {
-     setChildState(newState);
-   };
+  useEffect(() => {
+    axios
+      .get(`/guest/booked-dates?place=${id}`)
+      .then(({ data }) => setBookings([...data]))
+      .catch((error) => console.error("Error:", error));
+  }, []);
+  const toparent = (newState) => {
+    setChildState(newState);
+  };
   return (
     <div className="mt-4 bg-gray-100 px-8 py-8">
       <h1 className="text-3xl">{place.title}</h1>
@@ -54,17 +54,22 @@ function PlaceDetails() {
           <div>
             <Calendar place={bookings} />
           </div>
-        ) : null }
+        ) : null}
         <div>
           <BookingWidget place={place} />
         </div>
       </div>
       <div className="bg-white px-8 py-8 border-t">
-        <div>
-          <h2 className="font-semibold text-2xl">Extra info</h2>
-        </div>
+        <h2 className="font-semibold text-2xl">Extra Info</h2>
         <div className="mb-4 mt-2 text-sm text-gray-700 leading-5">
           {place.extraInfo}
+          <div className="mt-2">
+            {place.owner && (
+              <Link to={`/message?id=${place.owner._id}`}>
+                <span className="text-lg text-blue-500 ">Lets Meet Your Host ?</span>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </div>

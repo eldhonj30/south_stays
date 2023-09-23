@@ -89,8 +89,8 @@ const placeWiseBooking = asyncHandler(async (req, res) => {
   const id = req.query.place;
 
   const bookings = await BookingModel.find({
-    $and: [{ place: id }, { status: "booked" }],
-  });
+    $and: [{ place: id }, { status: "booked" }]
+  }).select('checkIn checkOut id');
 
   res.status(201).json(bookings);
 });

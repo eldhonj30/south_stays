@@ -39,25 +39,35 @@ export function UserContextProvider({ children }) {
         .catch((err) => {
            setReady(true);
         });
-    }
-
-    return () => {};
-  }, []);
-
-  useEffect(() => {
-    if (url === "" || url==="login" || url === "placedetails" || url === 'profile' && !user) {
+    } else {
       axios
-        .get("/guest/guestinfo")
-        .then(({ data }) => {
-          setUser(data);
-          setReady(true);
-        })
-        .catch((err) => {
-          setReady(true);
-        });
-    }
+            .get("/guest/guestinfo")
+            .then(({ data }) => {
+              setUser(data);
+              setReady(true);
+            })
+            .catch((err) => {
+              setReady(true);
+            });
+        }
+    
     return () => {};
   }, []);
+
+  // useEffect(() => {
+  //   if (url === "" || url==="login" || url === "placedetails" || url === 'profile' && !user) {
+  //     axios
+  //       .get("/guest/guestinfo")
+  //       .then(({ data }) => {
+  //         setUser(data);
+  //         setReady(true);
+  //       })
+  //       .catch((err) => {
+  //         setReady(true);
+  //       });
+  //   }
+  //   return () => {};
+  // }, []);
 
   return (
     <UserContext.Provider

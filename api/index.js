@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import userRoutes from './Routes/userRoutes.js'
 import hostRoutes from './Routes/hostRoutes.js'
 import adminRoutes from './Routes/adminRoutes.js'
+import messageRoutes from './Routes/messageRoutes.js'
 import connectDB from "./Config/dbConfig.js";
 import { notFound, errorHandler } from "./Middlewares/errorMiddleware.js";
 import { fileURLToPath } from 'url';
@@ -37,6 +38,7 @@ app.use('/Uploads', express.static(__dirname+'/Uploads'))
 app.use("/guest", userRoutes); 
 app.use("/host", hostRoutes);
 app.use("/admin",adminRoutes);
+app.use("/message",messageRoutes)
 
 
 app.use(notFound);

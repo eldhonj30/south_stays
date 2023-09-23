@@ -67,10 +67,10 @@ const addPlace = asyncHandler(async (req, res) => {
 const getPlace = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
-    const place = await placeModel.findById(id);
-
-    res.json(place);
+    const place = await placeModel.findById(id).populate('owner')
+    res.status(201).json(place);
   } catch (error) {
+    console.log(error);
     res.status(500);
   }
 });
@@ -78,7 +78,7 @@ const getPlace = asyncHandler(async (req, res) => {
 const editPlace = asyncHandler(async (req, res) => {
   const {
     id,
-    title,
+    title, 
     address,
     addedPhotos,
     description,

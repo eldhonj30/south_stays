@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 
+
 input[type="text"],input[type="password"],input[type="email"],input[type="number"],
 input[type="tel"],
 textarea {
@@ -29,3 +30,11 @@ button.black{
 
 
 
+#root{
+  overflow: hidden;
+}
+
+#root::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}

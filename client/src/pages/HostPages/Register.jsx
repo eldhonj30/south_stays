@@ -137,13 +137,18 @@ function Register() {
               modal: "customModal",
             }}
           >
-            <h2>Enter OTP recieved in you'r given email</h2>
+            <h2 className="mb-3">Enter OTP recieved in you'r given email</h2>
             <input
               type="text"
               placeholder={"Your OTP"}
               value={otp}
               onChange={(ev) => setOtp(ev.target.value)}
             />
+            {seconds > 0 && (
+              <h2 className="text-center">
+                Your Otp is only valid for 1 minute
+              </h2>
+            )}
             <div style={{ display: "flex", justifyContent: "space-evenly" }}>
               {seconds > 0 && (
                 <button
@@ -152,7 +157,7 @@ function Register() {
                   style={{
                     marginTop: "10px",
                     borderRadius: "5px",
-                    padding: "10px",
+                    padding: "8px",
                     backgroundColor: "black",
                     color: "white",
                   }}
@@ -164,11 +169,12 @@ function Register() {
                 {seconds > 0 ? (
                   <div
                     style={{
-                      marginTop: "10px",
                       borderRadius: "5px",
                       padding: "10px",
-                      backgroundColor: "black",
-                      color: "white",
+                      backgroundColor: "smokywhite",
+                      fontWeight: "bolder",
+                      fontSize: "1.8rem",
+                      color: "black",
                     }}
                   >
                     {displayTime()}
