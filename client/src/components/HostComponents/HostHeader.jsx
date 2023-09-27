@@ -62,6 +62,12 @@ const HostHeader = () => {
             >
               Bookings
             </Link>
+            <Link
+              to="/host/message"
+              className="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Messages
+            </Link>
             {host?.name && (
               <Link className="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">
                 <button

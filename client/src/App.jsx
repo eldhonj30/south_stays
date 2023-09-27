@@ -24,10 +24,10 @@ import BookingDetailsPage from './pages/Userpages/BookingDetailsPage';
 import HostBookingsPage from './pages/HostPages/HostBookingsPage';
 import SuccessPage from './pages/Userpages/SuccessPage';
 import MessagePage from './pages/Userpages/MessagePage';
+import HostMessagePage from './pages/HostPages/HostMessagePage';
 
 
 const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-
 
 axios.defaults.baseURL = backendUrl;
 axios.defaults.withCredentials = true;
@@ -62,6 +62,7 @@ function App() {
             <Route path="/host/listings" element={<PlaceListingPage />} />
             <Route path="/host/editplace/:id" element={<AddPlaces />} />
             <Route path="/host/bookings" element={<HostBookingsPage />} />
+            <Route path="/host/message" element={<HostMessagePage />} />
           </Route>
 
           <Route path="/admin/login" element={<AdminLogin />} />

@@ -67,7 +67,12 @@ const addPlace = asyncHandler(async (req, res) => {
 const getPlace = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
-    const place = await placeModel.findById(id).populate('owner')
+    // const place = await placeModel.findById(id).populate('owner')
+    const place = await placeModel.findById(id).populate({
+      path: "owner",
+      select: "name _id",
+    });
+
     res.status(201).json(place);
   } catch (error) {
     console.log(error);

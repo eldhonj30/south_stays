@@ -4,11 +4,11 @@ import { useContext } from "react";
 import LoadingSpinner from "../LoadingSpinner";
 
 const HostPrivate = () => {
-   const { host, ready } = useContext(UserContext);
+  const { host, ready } = useContext(UserContext);
 
-   if (!ready) {
-     return <LoadingSpinner />;
-   }
+  if (!ready) {
+    return <LoadingSpinner />;
+  }
 
   return host ? <Outlet /> : <Navigate to="/host/login" replace />;
 };

@@ -3,37 +3,37 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-import MesssageInput from "../../components/MesssageInput";
-import MessageSidebar from "../../components/MessageSidebar";
-import Message from "../../components/Message";
+import HostMesssageInput from "../../components/HostComponents/HostMesssageInput";
+import HostMessageSidebar from "../../components/HostComponents/HostMessageSidebar";
+import HostMessage from "../../components/HostComponents/HostMessage";
 import { UserContext } from "../../Contexts/UserContext";
 const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
-function MessagePage() {
+function HostMessagePage() {
   const [history, sethistory] = useState([]);
   const [receiver, setReceiver] = useState("");
-  const [socket, setSocket] = useState(null);
-  const [online, setOnline] = useState([]);
-  const [hId,setHId] = useState(null)
   const [msg, setMsg] = useState([]);
-  const { user } = useContext(UserContext);
+  const [online, setOnline] = useState([]);
+  const [uId,setUId] = useState(null)
+  const [socket, setSocket] = useState(null);
+  const { host } = useContext(UserContext);
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const hostId = searchParams.get("id");
-  const hostName = searchParams.get("name");
-  const userId = user._id;
+  let userId = searchParams.get("id");
+  const userName = searchParams.get("name");
+  const hostId = host._id;
 
   useEffect(() => {
-    if (hostId) {
+    if (userId) {
       axios
-        .get(`/message/chat/get-room/${userId}/${hostId}/${userId}`)
+        .get(`/message/chat/get-room/${userId}/${hostId}/${hostId}`)
         .then(({ data }) => {
-          setReceiver(hostName);
+          setReceiver(userName);
           setMsg(data.allMessage);
         });
     }
-    axios.get(`/message/history/${userId}`).then((response) => {
+    axios.get(`/message/history/${hostId}`).then((response) => {
       if (response.status === 201) {
         sethistory([...response.data]);
       }
@@ -43,16 +43,15 @@ function MessagePage() {
   useEffect(() => {
     const newSocket = io(backendUrl);
     setSocket(newSocket);
+
     return () => {
       newSocket.disconnect();
     };
-  }, [user]);
-
+  }, [host]);
   useEffect(() => {
     if (socket === null) return;
-    socket.emit("addNewUser", userId);
+    socket.emit("addNewUser", hostId);
     socket.on("getOnlineUsers", (res) => {
-      console.log(res);
       setOnline(res);
     });
   }, [socket]);
@@ -68,8 +67,8 @@ function MessagePage() {
   const updateMsg = (data, response) => {
     setMsg([...msg, data]);
     socket.emit("sendMessage", {
-      from: userId,
-      to: hostId || hId,
+      from: host._id,
+      to: userId || uId,
       message: data,
       chatId: response.chatid,
     });
@@ -77,32 +76,29 @@ function MessagePage() {
 
   const changeRoom = (roomId, todata) => {
     axios
-      .get(`/message/chat/change-room/${roomId}/${userId}`)
+      .get(`/message/chat/change-room/${roomId}/${hostId}`)
       .then(({ data }) => {
-        setHId(todata._id)
         setReceiver(todata.name);
+        setUId(todata._id)
         setMsg(data.allMessage);
       });
   };
 
   return (
-    <div className="flex-1 grid grid-cols-[1fr_2fr] md:grid-cols[1fr_1fr]">
-      <MessageSidebar history={history} changeRoom={changeRoom} />
+    <div className="flex-1 mt-16 grid grid-cols-[1fr_2fr] md:grid-cols[1fr_1fr]">
+      <HostMessageSidebar history={history} changeRoom={changeRoom} />
 
       <div className="flex flex-col ">
         <div className="pl-3 p-2 h-16 bg-gray-400 rounded-md">
           <h4 className="text-xl font-bold text-primary">{receiver}</h4>
         </div>
 
-        <Message msg={msg} />
-        <MesssageInput
-          hostId={hostId}
-          updateMsg={updateMsg}
-          hId={hId}
-        />
+        <HostMessage msg={msg} />
+        <HostMesssageInput userId={userId} updateMsg={updateMsg} uId={uId} />
       </div>
     </div>
   );
 }
 
-export default MessagePage;
+
+export default HostMessagePage;

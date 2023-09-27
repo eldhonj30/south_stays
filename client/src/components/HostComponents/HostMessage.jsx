@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 
 
-function Message({msg}) {
+function HostMessage({msg}) {
 
     const scrollRef = useRef(null);
 
@@ -31,4 +31,4 @@ function Message({msg}) {
   );
 }
 
-export default Message
+export default HostMessage

@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react'
-import { UserContext } from '../Contexts/UserContext';
+import { UserContext } from '../../Contexts/UserContext';
 
-function MesssageInput({hostId,updateMsg}) { 
+function HostMesssageInput({userId,updateMsg,uId}) { 
 
   const [newMsg,setNewMsg] = useState('');
-  const { user } = useContext(UserContext);
+  const { host } = useContext(UserContext);
 
   const sendMsg = async () => {
       let latestMsg = {
@@ -13,14 +13,13 @@ function MesssageInput({hostId,updateMsg}) {
         message:newMsg
       }
      const {data} = await axios.post("/message/guest", {
-       userId: user._id,
-       hostId:hostId || hId,
-       senderId:user._id,
+       hostId: host._id,
+       userId:userId || uId,
+       senderId: host._id,
        message: newMsg,
      });
-     setNewMsg("");
-     updateMsg(latestMsg, data);
-     
+    setNewMsg("");
+     updateMsg(latestMsg,data);
   }
 
   return (
@@ -56,4 +55,4 @@ function MesssageInput({hostId,updateMsg}) {
   );
 }
 
-export default MesssageInput
+export default HostMesssageInput

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function MessageSidebar({history,changeRoom}) {
+function HostMessageSidebar({history,changeRoom}) {
   return (
     <div className="bg-gray-300 ">
       <div className="flex p-2 gap-2">
@@ -31,11 +31,11 @@ function MessageSidebar({history,changeRoom}) {
               <div
                 key={index}
                 onClick={() => {
-                  changeRoom(chat._id, chat.hostId);
+                  changeRoom(chat._id, chat.userId);
                 }}
                 className="bg-white h-16  mx-8 my-2 px-4 py-2 rounded-2xl"
               >
-                <h3 className="font-bold">{chat?.hostId?.name}</h3>
+                <h3 className="font-bold">{chat?.userId?.name}</h3>
                 <p>{chat.latestmessage}</p>
               </div>
             ))}
@@ -48,4 +48,4 @@ function MessageSidebar({history,changeRoom}) {
   );
 }
 
-export default MessageSidebar
+export default HostMessageSidebar

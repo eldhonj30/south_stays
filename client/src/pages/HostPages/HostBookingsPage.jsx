@@ -3,6 +3,7 @@ import axios from "axios"
 import {UserContext} from "../../Contexts/UserContext"
 import HostCalender from "../../components/HostComponents/HostCalender";
 import PlaceImage from "../../components/UserComponents/PlaceImage";
+import { Link } from "react-router-dom";
 
 
 const HostBookingsPage = () => {
@@ -14,7 +15,6 @@ const HostBookingsPage = () => {
   const [date,setDate] = useState(today)
 
   const { host } = useContext(UserContext);
-
 
   useEffect(() => {
     axios.get('/host/bookings').then(({data}) => {
@@ -56,6 +56,13 @@ useEffect(() => {
                     {new Date(booking.checkOut).toISOString().split("T")[0]}
                   </p>
                   <p className="text-red-400 text-xl">{booking.status}</p>
+                  <Link
+                    to={`/host/message?id=${booking.user}&&name=${booking.name}`}
+                  >
+                    <button className="bg-green-500 m-2 ml-8 p-2 rounded-full text-lg">
+                      Message{" "}
+                    </button>
+                  </Link>
                 </div>
                 <div className="flex items-center">
                   <h1 className="text-md font-bold mb-2">

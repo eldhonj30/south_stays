@@ -65,7 +65,7 @@ function PlaceDetails() {
           {place.extraInfo}
           <div className="mt-2">
             {place.owner && (
-              <Link to={`/message?id=${place.owner._id}`}>
+              <Link to={`/message?id=${place.owner._id}&&name=${place.owner.name}`}>
                 <span className="text-lg text-blue-500 ">Lets Meet Your Host ?</span>
               </Link>
             )}

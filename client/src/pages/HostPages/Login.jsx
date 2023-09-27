@@ -10,20 +10,19 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setHost,host,ready } = useContext(UserContext);
+  const { setHost, host, ready } = useContext(UserContext);
   const navigate = useNavigate();
 
-    useEffect(() => {
-      
-      if (host && ready) {
-        navigate("/host");
-      }
-      return () => {};
-    }, []);
+  useEffect(() => {
+    if (host && ready) {
+      navigate("/host");
+    }
+    return () => {};
+  }, [host,ready]);
 
-      if (!ready) {
-        return <LoadingSpinner />;
-      }
+  if (!ready) {
+    return <LoadingSpinner />;
+  }
 
   const handleLogin = async (ev) => {
     ev.preventDefault();

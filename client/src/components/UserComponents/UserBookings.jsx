@@ -26,7 +26,7 @@ function UserBookings() {
               <PlaceImage place={booking.place} />
             </div>
             <div className="py-2 pr-3 grow">
-              <h2 className="text-xl">{booking.place.title}</h2>
+              <h2 className="text-xl">{booking?.place?.title}</h2>
               <div className="text-xl">
                 <BookingDates
                   booking={booking}
@@ -48,18 +48,18 @@ function UserBookings() {
                     />
                   </svg>
                   <span className="text-2xl">
-                    Total price: ₹{booking.price}
+                    Total price: ₹{booking?.price}
                   </span>
                 </div>
               </div>
             </div>
-            {booking.status === "booked" ? (
+            {booking?.status === "booked" ? (
               <div className="text-green-800 flex items-center text-2xl pr-4 font-bold">
                 {booking.status}
               </div>
             ) : (
               <div className="text-red-800 flex items-center text-2xl pr-4 font-bold">
-                {booking.status}
+                {booking?.status}
               </div>
             )}
           </Link>
