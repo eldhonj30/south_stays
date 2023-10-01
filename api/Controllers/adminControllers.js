@@ -14,7 +14,7 @@ const adminLogin = asyncHandler(async (req, res) => {
 
     if (authAdmin) {
       adminToken(res,admin.email,admin._id);
-      res.status(201).json({
+     return res.status(201).json({
         _id: authAdmin._id,
         name: authAdmin.name,
         email: authAdmin.email,
@@ -31,7 +31,7 @@ const adminLogin = asyncHandler(async (req, res) => {
 
 const adminInfo = asyncHandler((req,res) => {
   if(req?.admin) {
-     res.status(201).json(req.admin);
+    return res.status(201).json(req.admin);
   } else {
     res.status(500)
     throw new Error('invalid token')
@@ -44,7 +44,7 @@ const adminLogout = asyncHandler(async (req, res) => {
     httpOnly: true,
     expires: new Date(0),
   });
-  res.status(200).json({ message: "User Logged Out" });
+ return res.status(200).json({ message: "User Logged Out" });
 });
 
 

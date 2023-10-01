@@ -1,17 +1,59 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
-import axios from "axios"
+import { io } from "socket.io-client";
+import axios from "axios";
+const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
 const HostHeader = () => {
+  const { setHost, host, socket,setSocket } = useContext(UserContext);
+  const navigate = useNavigate();
 
-  const { setHost,host } = useContext(UserContext);
-  const navigate = useNavigate()
+  const [unreaded, setUnreaded] = useState(0);
+  const [online, setOnline] = useState([]);
 
+  useEffect(() => {
+    if (host?._id) {
+      axios.get(`/message/host/unreaded/${host._id}`).then(({ data }) => {
+        setUnreaded(data);
+        if (data > 100) {
+          setUnreaded("100+");
+        }
+      });
+    }
+  }, [socket]);
+
+  useEffect(() => {
+    if (host?._id) {
+    const newSocket = io(backendUrl);
+    setSocket(newSocket);
+     return () => {
+       newSocket.disconnect();
+     };
+    }
+  }, [host]);
+   useEffect(() => {
+     if (socket === null) return;
+     socket.emit("addNewUser", host._id);
+     socket.on("getOnlineUsers", (res) => {
+       setOnline(res);
+     });
+   }, [socket]);
+   useEffect(() => {
+     if (socket === null) return;
+     socket.on("newMessage", (data) => {
+       setUnreaded((prev) => prev + 1);
+     });
+   }, [socket]);
+   useEffect(() => {
+     if (socket === null) return;
+     socket.on("notification", () => {
+       setUnreaded(0);
+     });
+   }, [socket]);
 
   const handleLogout = () => {
     axios.post("/host/logout").then(() => {
-     localStorage.removeItem("host");
       setHost(null);
       navigate("/host");
     });
@@ -66,7 +108,14 @@ const HostHeader = () => {
               to="/host/message"
               className="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium"
             >
-              Messages
+              <div className="flex gap-1">
+                {unreaded > 0 && (
+                  <span className="flex w-[20px] bg-green-300 h-[20px] rounded-full justify-center items-center text-xs">
+                    {unreaded}
+                  </span>
+                )}
+                Messages
+              </div>
             </Link>
             {host?.name && (
               <Link className="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">

@@ -10,6 +10,7 @@ export function UserContextProvider({ children }) {
 
   const [host, setHost] = useState(null);
   const [admin, setAdmin] = useState(null);
+  const [socket,setSocket] = useState(null)
 
   let location = useLocation();
   let url = location.pathname.split("/")[1];
@@ -71,7 +72,7 @@ export function UserContextProvider({ children }) {
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, ready, host, setHost, admin, setAdmin }}>
+      value={{ user, setUser, ready, host, setHost, admin, setAdmin, socket, setSocket  }}>
       {children}
     </UserContext.Provider>
   );

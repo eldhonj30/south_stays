@@ -1,26 +1,44 @@
-import axios from 'axios';
-import React, { useContext, useState } from 'react'
-import { UserContext } from '../../Contexts/UserContext';
+import axios from "axios";
+import React, { useContext, useState } from "react";
+import { UserContext } from "../../Contexts/UserContext";
+import { HostUploadWidget } from "./HostUploadWidget";
 
-function HostMesssageInput({userId,updateMsg,uId}) { 
-
-  const [newMsg,setNewMsg] = useState('');
+function HostMesssageInput({ userId, updateMsg, uId }) {
+  const [newMsg, setNewMsg] = useState("");
+  const [url, setUrl] = useState("");
+  const [thumb, setThumb] = useState("");
+  const [filetype,setFiletype] = useState('')
   const { host } = useContext(UserContext);
 
   const sendMsg = async () => {
-      let latestMsg = {
-        mySelf:true,
-        message:newMsg
-      }
-     const {data} = await axios.post("/message/guest", {
-       hostId: host._id,
-       userId:userId || uId,
-       senderId: host._id,
-       message: newMsg,
-     });
+    if (!newMsg.trim()) return;
+    let latestMsg = {
+      mySelf: true,
+      message: newMsg,
+      fileUrl: url,
+      filetype:filetype
+    };
+    const { data } = await axios.post("/message/guest", {
+      hostId: host._id,
+      userId: userId || uId,
+      senderId: host._id,
+      message: newMsg,
+      fileUrl: url,
+      filetype:filetype
+    });
     setNewMsg("");
-     updateMsg(latestMsg,data);
-  }
+    setUrl("");
+    setThumb("");
+    setFiletype('')
+    updateMsg(latestMsg, data);
+  };
+
+  const getFileUrl = (data, demo, filetype) => {
+    setUrl(data);
+    setThumb(demo);
+    setNewMsg(filetype);
+    setFiletype(filetype);
+  };
 
   return (
     <div className="flex gap-1 mt-auto p-5">
@@ -30,10 +48,18 @@ function HostMesssageInput({userId,updateMsg,uId}) {
         onChange={(e) => setNewMsg(e.target.value)}
         placeholder="Your message"
       />
-      <input type="file" />
+      <HostUploadWidget getFileUrl={getFileUrl} />
+      {thumb && (
+        <div>
+          <img src={thumb} alt="" />
+        </div>
+      )}
       <div>
-        <button onClick={sendMsg} className="flex gap-2 h-10 
-        m-1 text-xl items-center p-3 border border-black rounded-lg bg-primary ">
+        <button
+          onClick={sendMsg}
+          className="flex gap-2 h-10 
+        m-1 text-xl items-center p-3 border border-black rounded-lg bg-primary "
+        >
           Send
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -55,4 +81,4 @@ function HostMesssageInput({userId,updateMsg,uId}) {
   );
 }
 
-export default HostMesssageInput
+export default HostMesssageInput;

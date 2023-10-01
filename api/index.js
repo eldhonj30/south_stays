@@ -83,4 +83,11 @@ io.on("connection", (socket) => {
       io.to(user[0].socketId).emit("newMessage", data.message);
     }
   });
+
+  socket.on("updateUnread",(info) => {
+    const user = onlineUsers.filter((user) => user.userId === info._id);
+    if (user.length > 0) {
+      io.to(user[0].socketId).emit("notification");
+    }
+  })
 });

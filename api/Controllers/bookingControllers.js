@@ -46,7 +46,7 @@ const bookPlace = asyncHandler(async (req, res) => {
       price,
     })
       .then((doc) => {
-        res.status(201).json(doc._id);
+        return res.status(201).json(doc._id);
       })
       .catch((error) => {
         console.log(error);
@@ -79,9 +79,9 @@ const isAvailable = asyncHandler(async (req, res) => {
     ],
   });
   if (booked) {
-    res.json(false);
+   return res.json(false);
   } else {
-    res.json(true);
+   return res.json(true);
   }
 });
 
@@ -92,7 +92,7 @@ const placeWiseBooking = asyncHandler(async (req, res) => {
     $and: [{ place: id }, { status: "booked" }]
   }).select('checkIn checkOut id');
 
-  res.status(201).json(bookings);
+ return res.status(201).json(bookings);
 });
 
 const getUserBookings = asyncHandler(async (req, res) => {
@@ -105,7 +105,7 @@ const getUserBookings = asyncHandler(async (req, res) => {
 
   const bookings = await BookingModel.find({ user: userId }).populate("place");
 
-  res.status(201).json(bookings);
+  return res.status(201).json(bookings);
 });
 
 const gethostBookings = asyncHandler(async (req, res) => {
@@ -118,7 +118,7 @@ const gethostBookings = asyncHandler(async (req, res) => {
   }
 
   const bookings = await BookingModel.find({ owner: hostId }).populate("place");
-  res.status(201).json(bookings);
+ return res.status(201).json(bookings);
 });
 
 const cancelBooking = asyncHandler(async (req, res) => {
@@ -129,9 +129,9 @@ const cancelBooking = asyncHandler(async (req, res) => {
   if (booking.checkIn > date) {
     booking.status = status;
     booking.save();
-    res.json(true);
+   return res.json(true);
   } else {
-    res.json(false);
+   return res.json(false);
   }
 });
 

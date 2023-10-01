@@ -1,27 +1,44 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react'
 import { UserContext } from '../Contexts/UserContext';
+import { UserUploadWidget } from './UserComponents/UserUploadWidget';
 
 function MesssageInput({hostId,updateMsg}) { 
 
-  const [newMsg,setNewMsg] = useState('');
+  const [newMsg, setNewMsg] = useState("");
+  const [url, setUrl] = useState("");
+  const [thumb, setThumb] = useState("");
+  const [filetype, setFiletype] = useState("");
   const { user } = useContext(UserContext);
 
   const sendMsg = async () => {
-      let latestMsg = {
-        mySelf:true,
-        message:newMsg
-      }
-     const {data} = await axios.post("/message/guest", {
-       userId: user._id,
-       hostId:hostId || hId,
-       senderId:user._id,
-       message: newMsg,
-     });
-     setNewMsg("");
-     updateMsg(latestMsg, data);
-     
-  }
+    if (!newMsg.trim()) return;
+    let latestMsg = {
+      mySelf: true,
+      message: newMsg,
+      fileUrl: url,
+      filetype: filetype,
+    };
+    const { data } = await axios.post("/message/guest", {
+      userId: user._id,
+      hostId: hostId || hId,
+      senderId: user._id,
+      message: newMsg,
+      fileUrl: url,
+      filetype: filetype,
+    });
+    setNewMsg("");
+    setUrl("");
+    setThumb("");
+    setFiletype('')
+    updateMsg(latestMsg, data);
+  };
+  const getFileUrl = (data, demo, filetype) => {
+    setUrl(data);
+    setThumb(demo);
+    setNewMsg(filetype);
+    setFiletype(filetype);
+  };
 
   return (
     <div className="flex gap-1 mt-auto p-5">
@@ -31,10 +48,18 @@ function MesssageInput({hostId,updateMsg}) {
         onChange={(e) => setNewMsg(e.target.value)}
         placeholder="Your message"
       />
-      <input type="file" />
+      <UserUploadWidget getFileUrl={getFileUrl} />
+      {thumb && (
+        <div>
+          <img src={thumb} alt="" />
+        </div>
+      )}
       <div>
-        <button onClick={sendMsg} className="flex gap-2 h-10 
-        m-1 text-xl items-center p-3 border border-black rounded-lg bg-primary ">
+        <button
+          onClick={sendMsg}
+          className="flex gap-2 h-10 
+        m-1 text-xl items-center p-3 border border-black rounded-lg bg-primary "
+        >
           Send
           <svg
             xmlns="http://www.w3.org/2000/svg"

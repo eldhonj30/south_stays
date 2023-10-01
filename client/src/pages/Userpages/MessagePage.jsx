@@ -95,11 +95,9 @@ function MessagePage() {
         </div>
 
         <Message msg={msg} />
-        <MesssageInput
-          hostId={hostId}
-          updateMsg={updateMsg}
-          hId={hId}
-        />
+        {receiver && (
+          <MesssageInput hostId={hostId} updateMsg={updateMsg} hId={hId} />
+        )}
       </div>
     </div>
   );
