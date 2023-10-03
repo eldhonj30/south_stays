@@ -52,7 +52,7 @@ const bookPlace = asyncHandler(async (req, res) => {
         console.log(error);
       });
   } else {
-    res.json(true)
+     return res.status(201).json(booked._id);
   }
 });
 

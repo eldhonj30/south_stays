@@ -43,6 +43,9 @@ const PlaceSchema = new mongoose.Schema({
   maxGuests:{
     type:Number,
     required:true
+  },
+  location:{
+    type:Object,
   }
 });
 

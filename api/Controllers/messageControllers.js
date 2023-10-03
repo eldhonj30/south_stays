@@ -4,7 +4,7 @@ import ChatRoomModel from "../Models/chatRoomModel.js";
 
 const createMessage = asyncHandler(async (req, res) => {
   try {
-    const { userId, hostId, senderId, message,fileUrl,filetype } = req.body;
+    const { userId, hostId, senderId, message, fileUrl, filetype } = req.body;
     let chatid;
     const chatHistory = await ChatRoomModel.findOne({
       $and: [{ userId: userId }, { hostId: hostId }],
@@ -28,7 +28,7 @@ const createMessage = asyncHandler(async (req, res) => {
       chatid,
       sender: senderId,
       fileUrl,
-      filetype
+      filetype,
     });
     return res.status(200).json(newMessage);
   } catch (error) {
@@ -49,15 +49,14 @@ const getMessage = asyncHandler(async (req, res) => {
     if (chatHistory) {
       const newMessage = await MessageModel.find({
         chatid: chatHistory._id,
-        
       }).sort({ createdAt: 1 });
 
       allMessage = newMessage.map((msg) => {
         return {
           mySelf: msg.sender.toString() === senderId,
           message: msg.message,
-          fileUrl:msg.fileUrl,
-          filetype:msg.filetype
+          fileUrl: msg.fileUrl,
+          filetype: msg.filetype,
         };
       });
     }
@@ -118,7 +117,9 @@ const changeChatRoom = asyncHandler(async (req, res) => {
 const unreadCount = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    const prevChatIds = await ChatRoomModel.find({$or:[{hostId: id},{userId:id}]}).select("_id");
+    const prevChatIds = await ChatRoomModel.find({
+      $or: [{ hostId: id }, { userId: id }],
+    }).select("_id");
 
     const count = await MessageModel.find({
       $and: [

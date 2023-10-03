@@ -26,4 +26,4 @@ router.get("/user-bookings",getUserBookings)
 router.get("/host-bookings",gethostBookings) 
 
 
-export default router;  
+export default router; 

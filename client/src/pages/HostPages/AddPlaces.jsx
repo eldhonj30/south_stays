@@ -3,7 +3,10 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Perks from "../../components/HostComponents/Perks";
 import PhotosUploader from "../../components/HostComponents/PhotosUploader";
+import GMap from "../../components/GMap"
 import { toast } from "react-toastify";
+import AddressSearch from "../../components/HostComponents/AddressSearch";
+import Modal from "react-responsive-modal";
 
 function AddPlaces() {
   const { id } = useParams();
@@ -18,6 +21,8 @@ function AddPlaces() {
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(1);
   const [price, setPrice] = useState(100);
+  const [map,setMap] = useState(false)
+  const [location,setLocation] = useState(null)
 
   const navigate = useNavigate();
 
@@ -39,6 +44,7 @@ function AddPlaces() {
         setCheckOut(data.checkOut);
         setMaxGuests(data.maxGuests);
         setPrice(data.price)
+        setLocation(data.location)
       })
       .catch((err) => {
         
@@ -46,6 +52,23 @@ function AddPlaces() {
       });
   }, [id]);
 
+  const openMap = (evnt) => {
+    evnt.preventDefault()
+    setMap(true)
+  }
+
+  const closeMap = () => {
+    setMap(false)
+  }
+
+  const getAddress = (data) => {
+    setAddress(data)
+  }
+  
+  const getLocation = (data) => {
+    if(!data) return
+    setLocation(data);
+  }
 
   const savePlace = async (ev) => {
     ev.preventDefault();
@@ -60,6 +83,7 @@ function AddPlaces() {
       checkOut,
       maxGuests,
       price,
+      location
     };
 
     if (id) {
@@ -77,8 +101,6 @@ function AddPlaces() {
         toast.error("please fill out the fields");
       }
     }
-
-   
   };
 
   return (
@@ -97,19 +119,27 @@ function AddPlaces() {
           />
           <h2 className="text-2xl mt-2">Address</h2>
           <p className="text-gray-500 text-sm">Address to this place</p>
-          <input
-            type="text"
-            placeholder="address"
-            value={address}
-            onChange={(ev) => setAddress(ev.target.value)}
-          />
+          <div className="flex gap-2">
+            <AddressSearch getAddress={getAddress} />
+            <button onClick={openMap} className="bg-transparent">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
           <h2 className="text-2xl mt-2">Photos</h2>
           <p className="text-gray-500 text-sm">More = better</p>
 
-          <PhotosUploader
-            addedPhotos={addedPhotos}
-            onChange={setAddedPhotos}
-          />
+          <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
 
           <h2 className="text-2xl mt-2">Description</h2>
           <p className="text-gray-500 text-sm">Descriptions for your place</p>
@@ -182,6 +212,9 @@ function AddPlaces() {
           </div>
         </form>
       </div>
+      <Modal open={map} onClose={closeMap} center>
+        <GMap getLocation={getLocation} />
+      </Modal>
     </div>
   );
 }

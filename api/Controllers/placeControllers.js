@@ -45,6 +45,7 @@ const addPlace = asyncHandler(async (req, res) => {
     checkOut,
     maxGuests,
     price,
+    location,
   } = req.body;
 
   const placeDoc = await placeModel.create({
@@ -59,6 +60,7 @@ const addPlace = asyncHandler(async (req, res) => {
     checkOut,
     maxGuests,
     price,
+    location,
   });
 
   res.status(200).json(placeDoc);
@@ -93,6 +95,7 @@ const editPlace = asyncHandler(async (req, res) => {
     checkOut,
     maxGuests,
     price,
+    location,
   } = req.body;
 
   const placeDoc = await placeModel.findById(id);
@@ -108,6 +111,7 @@ const editPlace = asyncHandler(async (req, res) => {
     checkOut,
     maxGuests,
     price,
+    location
   });
   placeDoc.save();
 

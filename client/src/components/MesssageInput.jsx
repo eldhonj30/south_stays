@@ -1,10 +1,9 @@
-import axios from 'axios';
-import React, { useContext, useState } from 'react'
-import { UserContext } from '../Contexts/UserContext';
-import { UserUploadWidget } from './UserComponents/UserUploadWidget';
+import axios from "axios";
+import React, { useContext, useState } from "react";
+import { UserContext } from "../Contexts/UserContext";
+import { UserUploadWidget } from "./UserComponents/UserUploadWidget";
 
-function MesssageInput({hostId,updateMsg}) { 
-
+function MesssageInput({ hostId, updateMsg }) {
   const [newMsg, setNewMsg] = useState("");
   const [url, setUrl] = useState("");
   const [thumb, setThumb] = useState("");
@@ -30,7 +29,7 @@ function MesssageInput({hostId,updateMsg}) {
     setNewMsg("");
     setUrl("");
     setThumb("");
-    setFiletype('')
+    setFiletype("");
     updateMsg(latestMsg, data);
   };
   const getFileUrl = (data, demo, filetype) => {
@@ -81,4 +80,4 @@ function MesssageInput({hostId,updateMsg}) {
   );
 }
 
-export default MesssageInput
+export default MesssageInput;
