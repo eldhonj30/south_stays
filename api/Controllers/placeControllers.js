@@ -1,6 +1,7 @@
 import placeModel from "../Models/placeModel.js";
 import imageDownloader from "image-downloader";
 import asyncHandler from "express-async-handler";
+import BookingModel from "../Models/bookingModel.js";
 
 const imageLinkUpload = asyncHandler(async (req, res) => {
   const { link } = req.body;
@@ -14,10 +15,10 @@ const imageLinkUpload = asyncHandler(async (req, res) => {
     });
 
     if (data) {
-      res.json(newName);
+    return res.json(newName);
     }
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 
@@ -28,7 +29,7 @@ const imageUpload = asyncHandler(async (req, res) => {
 
     uploadFiles.push(filename);
   }
-  res.json(uploadFiles);
+  return res.json(uploadFiles);
 });
 
 const addPlace = asyncHandler(async (req, res) => {
@@ -60,10 +61,13 @@ const addPlace = asyncHandler(async (req, res) => {
     checkOut,
     maxGuests,
     price,
-    location,
+    location: {
+      type: "Point",
+      coordinates: [Number(location.lat), Number(location.lng)],
+    },
   });
 
-  res.status(200).json(placeDoc);
+  return res.status(200).json(placeDoc);
 });
 
 const getPlace = asyncHandler(async (req, res) => {
@@ -75,17 +79,17 @@ const getPlace = asyncHandler(async (req, res) => {
       select: "name _id",
     });
 
-    res.status(201).json(place);
+    return res.status(201).json(place);
   } catch (error) {
     console.log(error);
-    res.status(500);
+    return res.status(500);
   }
 });
 
 const editPlace = asyncHandler(async (req, res) => {
   const {
     id,
-    title, 
+    title,
     address,
     addedPhotos,
     description,
@@ -111,23 +115,98 @@ const editPlace = asyncHandler(async (req, res) => {
     checkOut,
     maxGuests,
     price,
-    location
+    location: {
+      type: "Point",
+      coordinates: [Number(location.lat), Number(location.lng)],
+    },
   });
   placeDoc.save();
 
-  res.status(200).json("ok");
+  return res.status(200).json("ok");
 });
 
 const userPlaces = asyncHandler(async (req, res) => {
   const { _id } = req.hostD;
   const places = await placeModel.find({ owner: _id });
-  res.status(200).json(places);
+  return res.status(200).json(places);
 });
 
 const getAllPlaces = asyncHandler(async (req, res) => {
   const places = await placeModel.find();
-  res.status(200).json(places);
+  return res.status(200).json(places);
 });
+
+const searchByLoc = asyncHandler(async (req, res) => {
+  const { lat, long } = req.query;
+  const radius = 5000;
+  try {
+    const hotel = await placeModel.find({
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [Number(lat), Number(long)],
+          },
+          $maxDistance: radius,
+        },
+      },
+    });
+    return res.status(201).json(hotel);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const searchByDate = asyncHandler(async (req, res) => {
+  const { In, Out } = req.query;
+  let checkIn = In
+  let checkOut = Out
+  try {
+    const bookedPlaces = await BookingModel.find({
+      $or: [
+      {
+        $and: [
+          { status: "booked" },
+          { checkIn: { $gte: checkIn } },
+          { checkOut: { $lte: checkIn } },
+        ],
+      },
+      {
+        $and: [
+          { status: "booked" },
+          { checkIn: { $lt: checkOut } },
+          { checkOut: { $gte: checkOut } },
+        ],
+      },
+    ],
+    });
+    if (bookedPlaces) {
+      const bookedIds = bookedPlaces.map((booking) => booking.place);
+
+      const availableplaces = await placeModel.find({
+        _id: { $nin: bookedIds },
+      });
+       return res.status(201).json(availableplaces);
+    } else {
+      const availableplaces = await placeModel.find({});
+      return res.status(201).json(availableplaces);
+    }
+   
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const searchByGuest = asyncHandler( async(req,res) => {
+  const {guest} = req.query
+ try {
+   const places = await placeModel.find({ maxGuests: { $gte: guest } });
+   return res.status(201).json(places)
+ } catch (error) {
+  console.error(error);
+ }
+
+})
 
 export {
   imageLinkUpload,
@@ -137,4 +216,7 @@ export {
   getAllPlaces,
   getPlace,
   editPlace,
+  searchByLoc,
+  searchByDate,
+  searchByGuest
 };

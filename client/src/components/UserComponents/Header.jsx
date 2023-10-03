@@ -1,30 +1,29 @@
 import React, { useContext, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import SearchComponent from "./SearchComponent";
 
 function Header() {
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
 
   let location = useLocation();
-  let host = location.pathname
+  let host = location.pathname;
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleLogout = () => {
-    axios.post('/guest/logout').then(() => {
-       setIsDropdownOpen(!isDropdownOpen);
-       setUser(null)
-       navigate("/");
-    })
-  }
-
+    axios.post("/guest/logout").then(() => {
+      setIsDropdownOpen(!isDropdownOpen);
+      setUser(null);
+      navigate("/");
+    });
+  };
 
   return (
     <div>
@@ -46,29 +45,7 @@ function Header() {
           </svg>
           <span className="font-bold">South Stays</span>
         </Link>
-        <div className="flex gap-2 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-300">
-          <div>Anywhere</div>
-          <div className="border-l border-gray-300"></div>
-          <div>Any Week</div>
-          <div className="border-l border-gray-300"></div>
-          <div>Add guests</div>
-          <button className="bg-primary text-white p-1 rounded-full">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
-          </button>
-        </div>
+        <SearchComponent />
 
         <div className="flex items-center gap-2 border border-gray-300 rounded-full py-1 px-4 ">
           {host == "/" && (

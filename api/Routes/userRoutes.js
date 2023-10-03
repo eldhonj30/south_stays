@@ -1,6 +1,6 @@
 import express from "express";
 import { registerUser, userAuth, userInfo, userLogout, userGoogleLogin,userValidation,editProfile } from "../Controllers/userControllers.js";
-import { getPlace } from "../Controllers/placeControllers.js";
+import { getPlace,searchByLoc,searchByDate,searchByGuest } from "../Controllers/placeControllers.js";
 import {
   bookPlace,
   isAvailable,
@@ -29,7 +29,11 @@ router.put("/cancel-booking",cancelBooking);
 router.get('/booked-dates',placeWiseBooking);
 router.post("/edit-form",userValidation);
 router.post("/edit-profile",editProfile);
+router.get("/search-place-location",searchByLoc); 
+router.get("/search-place-date",searchByDate);
+router.get("/search-place-guest", searchByGuest);
   
+
 
 
 export default router; 

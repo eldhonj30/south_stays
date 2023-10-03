@@ -1,17 +1,26 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {Link} from "react-router-dom"
+import {Link,useLocation,useNavigate} from "react-router-dom"
 
 const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
 
 function IndexPage() {
   const [places,setPlaces] = useState([])
+  const navigate = useNavigate()
+  
+   const location = useLocation();
+   let data = location.state;
   useEffect(() => {
-    axios.get("/admin/all-places").then((response) => {
-      setPlaces(response.data);
-    });
-  },[])
+    if(data?.length){
+      setPlaces(data)
+    } else{
+       axios.get("/admin/all-places").then((response) => {
+         setPlaces(response.data);
+       });
+    }
+  },[data])
+
   return (
     <div className="mt-8 px-8 gap-x-6 gap-y-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {places.length > 0 &&
