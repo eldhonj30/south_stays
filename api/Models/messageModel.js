@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const messageSchema = new mongoose.Schema(
   {
     chatid: {
@@ -29,6 +28,6 @@ const messageSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const MessageModel = mongoose.model('Message',messageSchema)
+const MessageModel = mongoose.model("Message", messageSchema);
 
 export default MessageModel;

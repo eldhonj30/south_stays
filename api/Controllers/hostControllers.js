@@ -134,7 +134,7 @@ const verifyOtp = asyncHandler(async (req, res) => {
   }
 });
 
-// host login 
+// host login
 
 const hostLogin = asyncHandler(async (req, res) => {
   const email = req.body.email.trim();
@@ -142,16 +142,16 @@ const hostLogin = asyncHandler(async (req, res) => {
 
   const hostExists = await hostModel.findOne({ email });
 
-    if (hostExists?.blocked) {
-      res.status(401);
-      throw new Error("You are blocked");
-    }
+  if (hostExists?.blocked) {
+    res.status(401);
+    throw new Error("You are blocked");
+  }
 
   if (hostExists?.isEmailVerified) {
     const authHost = bcrypt.compareSync(password, hostExists.password);
 
     if (authHost) {
-       hostToken(res, hostExists.email, hostExists._id);
+      hostToken(res, hostExists.email, hostExists._id);
       res.status(201).json({
         _id: hostExists._id,
         name: hostExists.name,
@@ -172,26 +172,25 @@ const hostLogin = asyncHandler(async (req, res) => {
 const hostInfo = asyncHandler((req, res) => {
   const { host } = req.cookies;
 
-    if (host) {
-      jwt.verify(host, process.env.JWT_SECRET, {}, async (err, hostDetails) => {
-        if (err) throw err;
+  if (host) {
+    jwt.verify(host, process.env.JWT_SECRET, {}, async (err, hostDetails) => {
+      if (err) throw err;
 
-        const hostD = await hostModel.findById(hostDetails.id);
-        if(hostD?.blocked) {
-            res.cookie("host", "", {
-              httpOnly: true,
-              expires: new Date(0),
-            });
-          res.json(false)
-        } else {
-          res.json({ name:hostD.name, email:hostD.email, _id:hostD._id });
-        }
-        
-      });
-    } else {  
-     res.status(400);
-     throw new Error("invalid token");
-    }
+      const hostD = await hostModel.findById(hostDetails.id);
+      if (hostD?.blocked) {
+        res.cookie("host", "", {
+          httpOnly: true,
+          expires: new Date(0),
+        });
+        res.json(false);
+      } else {
+        res.json({ name: hostD.name, email: hostD.email, _id: hostD._id });
+      }
+    });
+  } else {
+    res.status(400);
+    throw new Error("invalid token");
+  }
 });
 
 const hostLogout = asyncHandler(async (req, res) => {

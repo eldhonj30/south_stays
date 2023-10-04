@@ -13,12 +13,12 @@ export async function getOtp() {
 }
 
 export function getMsg(otp) {
-    const message = {
-      from: '"Fred Foo 👻" <foo@example.com>', // sender address
-      to: "bar@example.com", // list of receivers
-      subject: "Verification mail", // Subject line
-      text: `your otp is ${otp}`, // plain text body
-    };
+  const message = {
+    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    to: "bar@example.com", // list of receivers
+    subject: "Verification mail", // Subject line
+    text: `your otp is ${otp}`, // plain text body
+  };
 
-    return message;
+  return message;
 }

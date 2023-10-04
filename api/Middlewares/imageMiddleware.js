@@ -1,7 +1,5 @@
 import multer from "multer";
-import path from "path"
-
-
+import path from "path";
 
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image/")) {
@@ -27,6 +25,4 @@ const photoUploader = multer({
   fileFilter: fileFilter,
 });
 
-export {photoUploader}
-
-
+export { photoUploader };

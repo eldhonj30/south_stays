@@ -3,15 +3,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const key = process.env.STRIPE_KEY
-const clinetUrl = process.env.CLIENT_URL
+const key = process.env.STRIPE_KEY;
+const clinetUrl = process.env.CLIENT_URL;
 
-const stripe = new Stripe(key); 
+const stripe = new Stripe(key);
 
 const payment = async (req, res) => {
-   const {
-   price,name,place
-   } = req.body;
+  const { price, name, place } = req.body;
 
   const session = await stripe.checkout.sessions.create({
     line_items: [
@@ -32,7 +30,6 @@ const payment = async (req, res) => {
   });
 
   res.json({ id: session.id });
-}
+};
 
-
-export {payment}
+export { payment };

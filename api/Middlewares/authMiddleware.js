@@ -21,7 +21,7 @@ const guestAuth = (req, res, next) => {
 
 const hostAuth = (req, res, next) => {
   const { host } = req.cookies;
- 
+
   if (host) {
     jwt.verify(host, process.env.JWT_SECRET, {}, async (err, hostDetails) => {
       if (err) throw err;
@@ -31,12 +31,12 @@ const hostAuth = (req, res, next) => {
       next();
     });
   } else {
-    res.status(401).json({ message: "invalid autherization" });   
+    res.status(401).json({ message: "invalid autherization" });
   }
 };
 
 const adminAuth = (req, res, next) => {
-  const { admin } = req.cookies; 
+  const { admin } = req.cookies;
 
   if (admin) {
     jwt.verify(admin, process.env.JWT_SECRET, {}, async (err, adminD) => {
@@ -45,11 +45,10 @@ const adminAuth = (req, res, next) => {
       req.admin = await AdminModel.findById(adminD.id).select("-password");
 
       next();
-    }); 
+    });
   } else {
     res.status(401).json({ message: "invalid autherization" });
   }
 };
 
-
-export { guestAuth, hostAuth, adminAuth }; 
+export { guestAuth, hostAuth, adminAuth };

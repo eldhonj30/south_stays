@@ -13,8 +13,8 @@ const adminLogin = asyncHandler(async (req, res) => {
     const authAdmin = bcrypt.compareSync(password, admin.password);
 
     if (authAdmin) {
-      adminToken(res,admin.email,admin._id);
-     return res.status(201).json({
+      adminToken(res, admin.email, admin._id);
+      return res.status(201).json({
         _id: authAdmin._id,
         name: authAdmin.name,
         email: authAdmin.email,
@@ -29,23 +29,21 @@ const adminLogin = asyncHandler(async (req, res) => {
   }
 });
 
-const adminInfo = asyncHandler((req,res) => {
-  if(req?.admin) {
+const adminInfo = asyncHandler((req, res) => {
+  if (req?.admin) {
     return res.status(201).json(req.admin);
   } else {
-    res.status(500)
-    throw new Error('invalid token')
+    res.status(500);
+    throw new Error("invalid token");
   }
- 
-})
+});
 
 const adminLogout = asyncHandler(async (req, res) => {
   res.cookie("admin", "", {
     httpOnly: true,
     expires: new Date(0),
   });
- return res.status(200).json({ message: "User Logged Out" });
+  return res.status(200).json({ message: "User Logged Out" });
 });
 
-
-export {adminLogin,adminInfo,adminLogout}
+export { adminLogin, adminInfo, adminLogout };

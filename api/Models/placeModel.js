@@ -52,8 +52,6 @@ const PlaceSchema = new mongoose.Schema({
 
 PlaceSchema.index({ location: "2dsphere" });
 
-
-const PlaceModel = mongoose.model('Place',PlaceSchema);
+const PlaceModel = mongoose.model("Place", PlaceSchema);
 
 export default PlaceModel;
- 

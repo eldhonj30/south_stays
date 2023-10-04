@@ -15,7 +15,7 @@ const imageLinkUpload = asyncHandler(async (req, res) => {
     });
 
     if (data) {
-    return res.json(newName);
+      return res.json(newName);
     }
   } catch (error) {
     return res.status(500).json(error);
@@ -159,26 +159,26 @@ const searchByLoc = asyncHandler(async (req, res) => {
 
 const searchByDate = asyncHandler(async (req, res) => {
   const { In, Out } = req.query;
-  let checkIn = In
-  let checkOut = Out
+  let checkIn = In;
+  let checkOut = Out;
   try {
     const bookedPlaces = await BookingModel.find({
       $or: [
-      {
-        $and: [
-          { status: "booked" },
-          { checkIn: { $gte: checkIn } },
-          { checkOut: { $lte: checkIn } },
-        ],
-      },
-      {
-        $and: [
-          { status: "booked" },
-          { checkIn: { $lt: checkOut } },
-          { checkOut: { $gte: checkOut } },
-        ],
-      },
-    ],
+        {
+          $and: [
+            { status: "booked" },
+            { checkIn: { $gte: checkIn } },
+            { checkOut: { $lte: checkIn } },
+          ],
+        },
+        {
+          $and: [
+            { status: "booked" },
+            { checkIn: { $lt: checkOut } },
+            { checkOut: { $gte: checkOut } },
+          ],
+        },
+      ],
     });
     if (bookedPlaces) {
       const bookedIds = bookedPlaces.map((booking) => booking.place);
@@ -186,27 +186,25 @@ const searchByDate = asyncHandler(async (req, res) => {
       const availableplaces = await placeModel.find({
         _id: { $nin: bookedIds },
       });
-       return res.status(201).json(availableplaces);
+      return res.status(201).json(availableplaces);
     } else {
       const availableplaces = await placeModel.find({});
       return res.status(201).json(availableplaces);
     }
-   
   } catch (error) {
     console.log(error);
   }
 });
 
-const searchByGuest = asyncHandler( async(req,res) => {
-  const {guest} = req.query
- try {
-   const places = await placeModel.find({ maxGuests: { $gte: guest } });
-   return res.status(201).json(places)
- } catch (error) {
-  console.error(error);
- }
-
-})
+const searchByGuest = asyncHandler(async (req, res) => {
+  const { guest } = req.query;
+  try {
+    const places = await placeModel.find({ maxGuests: { $gte: guest } });
+    return res.status(201).json(places);
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 export {
   imageLinkUpload,
@@ -218,5 +216,5 @@ export {
   editPlace,
   searchByLoc,
   searchByDate,
-  searchByGuest
+  searchByGuest,
 };

@@ -8,14 +8,14 @@ const ChatRoomSchema = new mongoose.Schema(
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref:"User",
+      ref: "User",
       require: true,
     },
     hostId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref:"Host",
+      ref: "Host",
       require: true,
-    }
+    },
   },
   { timestamps: true }
 );

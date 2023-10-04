@@ -58,6 +58,7 @@ function AddPlaces() {
   }
 
   const closeMap = () => {
+    if(!location) toast.error("Please select Place's location")
     setMap(false)
   }
 
@@ -120,7 +121,7 @@ function AddPlaces() {
           <h2 className="text-2xl mt-2">Address</h2>
           <p className="text-gray-500 text-sm">Address to this place</p>
           <div className="flex gap-2">
-            <AddressSearch getAddress={getAddress} />
+            <AddressSearch address={address} getAddress={getAddress} />
             <button onClick={openMap} className="bg-transparent">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -214,6 +215,7 @@ function AddPlaces() {
       </div>
       <Modal open={map} onClose={closeMap} center>
         <GMap getLocation={getLocation} />
+        <button onClick={closeMap} className="absolute bottom-8 right-16 p-2 bg-primary rounded">Select</button>
       </Modal>
     </div>
   );

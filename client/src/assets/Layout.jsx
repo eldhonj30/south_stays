@@ -10,7 +10,13 @@ function Layout() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {host === "host" ? <HostHeader /> :host === "admin" ? <AdminHeader/> : <Header />}
+      {host === "host" ? (
+        <HostHeader />
+      ) : host === "admin" ? (
+        <AdminHeader />
+      ) : (
+        <Header />
+      )}
       <Outlet />
     </div>
   );

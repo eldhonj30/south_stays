@@ -5,7 +5,7 @@ import {
 } from "@mapbox/search-js-react";
 const Token = import.meta.env.VITE_REACT_APP_MAP_BOX;
 
-function AddressSearch({getAddress}) {
+function AddressSearch({getAddress, address}) {
   const [token, setToken] = useState("");
 
   useEffect(() => {
@@ -27,6 +27,7 @@ function AddressSearch({getAddress}) {
             placeholder="Start typing your address, e.g. 123 Main..."
             autoComplete="address-line1"
             id="mapbox-autofill"
+            value={address}
             onChange={(e) => getAddress(e.target.value)}
           />
         </AddressAutofill>
