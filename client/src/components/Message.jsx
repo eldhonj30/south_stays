@@ -6,14 +6,13 @@ function Message({msg}) {
     const scrollRef = useRef(null);
 
     useEffect(() => {
-      if (scrollRef.current) {
-        console.log("Scrolling into view");
-        scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      if (scrollRef?.current) {
+        scrollRef.current.scrollIntoView();
       }
     }, [msg]);
 
   return (
-    <div className="h-[350px] overflow-auto overscroll-none" ref={scrollRef}>
+    <div className="h-[350px] overflow-auto overscroll-none" >
       {msg.map((item, index) => (
         <div key={index}>
           {item.mySelf === true ? (
@@ -49,6 +48,7 @@ function Message({msg}) {
           )}
         </div>
       ))}
+      <div ref={scrollRef}/>
     </div>
   );
 }

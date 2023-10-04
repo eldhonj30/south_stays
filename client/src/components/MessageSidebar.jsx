@@ -1,6 +1,7 @@
 import React from 'react'
 
-function MessageSidebar({history,changeRoom}) {
+function MessageSidebar({history,changeRoom,socket}) {
+  console.log(socket);
   return (
     <div className="bg-gray-300 ">
       <div className="flex p-2 gap-2">

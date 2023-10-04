@@ -52,7 +52,6 @@ function MessagePage() {
     if (socket === null) return;
     socket.emit("addNewUser", userId);
     socket.on("getOnlineUsers", (res) => {
-      console.log(res);
       setOnline(res);
     });
   }, [socket]);
@@ -87,7 +86,7 @@ function MessagePage() {
 
   return (
     <div className="flex-1 grid grid-cols-[1fr_2fr] md:grid-cols[1fr_1fr]">
-      <MessageSidebar history={history} changeRoom={changeRoom} />
+      <MessageSidebar history={history} changeRoom={changeRoom} socket={socket} />
 
       <div className="flex flex-col ">
         <div className="pl-3 p-2 h-16 bg-gray-400 rounded-md">
