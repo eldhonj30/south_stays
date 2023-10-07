@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {Link,useLocation,useNavigate} from "react-router-dom"
+import LoadingSpinner from '../../components/LoadingSpinner'
 
 const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-
 
 function IndexPage() {
   const [places,setPlaces] = useState([])
@@ -19,7 +19,11 @@ function IndexPage() {
          setPlaces(response.data);
        });
     }
-  },[data])
+  },[data,places])
+
+  if (!places?.length) {
+      return <LoadingSpinner />;
+  }
 
   return (
     <div className="mt-8 px-8 gap-x-6 gap-y-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

@@ -103,7 +103,9 @@ const getUserBookings = asyncHandler(async (req, res) => {
     userId = req.query.id;
   }
 
-  const bookings = await BookingModel.find({ user: userId }).populate("place");
+  const bookings = await BookingModel.find({ user: userId })
+    .sort("-_id")
+    .populate("place");
 
   return res.status(201).json(bookings);
 });
@@ -117,7 +119,9 @@ const gethostBookings = asyncHandler(async (req, res) => {
     hostId = req.query.id;
   }
 
-  const bookings = await BookingModel.find({ owner: hostId }).populate("place");
+  const bookings = await BookingModel.find({ owner: hostId })
+    .sort("-_id")
+    .populate("place");
   return res.status(201).json(bookings);
 });
 

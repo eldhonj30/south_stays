@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import {toast} from "react-toastify"
 
 export const UserContext = createContext({});
 
@@ -13,24 +14,31 @@ export function UserContextProvider({ children }) {
   const [socket,setSocket] = useState(null)
 
   let location = useLocation();
+  let dep = location.pathname
   let url = location.pathname.split("/")[1];
 
   useEffect(() => {
-    if (url === "host" && !host) {
+    if (url === "host") {
       axios
         .get("/host/hostinfo")
         .then(({ data }) => {
-          setHost(data);
+           if (data) {
+             setHost(data);
+           } else {
+             setHost(null);
+             toast.error("You have been blocked,Please contact admin");
+           }
           setReady(true);
         })
         .catch((err) => {
+          setHost(null)
           setReady(true);
         });
     }
-  }, []);
+  }, [dep]);
 
   useEffect(() => {
-    if (url === "admin" && !admin) {
+    if (url === "admin") {
       axios
         .get("/admin/admininfo")
         .then(({ data }) => {
@@ -38,37 +46,30 @@ export function UserContextProvider({ children }) {
           setReady(true);
         })
         .catch((err) => {
+          setAdmin(null)
            setReady(true);
         });
     } else {
-      axios
-            .get("/guest/guestinfo")
-            .then(({ data }) => {
+      if (url !== "login") {
+        axios
+          .get("/guest/guestinfo")
+          .then(({ data }) => {
+            if (data) {
               setUser(data);
-              setReady(true);
-            })
-            .catch((err) => {
-              setReady(true);
-            });
+            } else {
+              setUser(null);
+              toast.error("You have been blocked,Please contact admin");
+            }
+          })
+          .catch((err) => {
+            setUser(null);
+          });
+      }
+      setReady(true);
         }
     
     return () => {};
-  }, []);
-
-  // useEffect(() => {
-  //   if (url === "" || url==="login" || url === "placedetails" || url === 'profile' && !user) {
-  //     axios
-  //       .get("/guest/guestinfo")
-  //       .then(({ data }) => {
-  //         setUser(data);
-  //         setReady(true);
-  //       })
-  //       .catch((err) => {
-  //         setReady(true);
-  //       });
-  //   }
-  //   return () => {};
-  // }, []);
+  }, [dep]);
 
   return (
     <UserContext.Provider

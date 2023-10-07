@@ -3,6 +3,7 @@ import { UserContext } from "../../Contexts/UserContext";
 import { Link, useParams } from "react-router-dom";
 import ProfileComponent from "../../components/UserComponents/ProfileComponent";
 import UserBookings from "../../components/UserComponents/UserBookings";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 function ProfilePage() {
 
@@ -12,6 +13,10 @@ function ProfilePage() {
   if (subpage === undefined) {
     subpage = "profile";
   }
+
+   if (!user) {
+     return <LoadingSpinner />;
+   }
 
 
   function linkClasses(type=null) {

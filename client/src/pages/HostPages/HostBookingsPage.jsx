@@ -21,11 +21,12 @@ const HostBookingsPage = () => {
       setBookings([...data])
     })
      
-  },[])
+  },[]) 
+
 
 useEffect(() => {
   const filteredBookings = bookings.filter((booking) => {
-    return new Date(booking.checkIn).toISOString().split("T")[0] === date;
+    return new Date(booking.checkIn || booking.checkOut).toISOString().split("T")[0] === date;
   });
 
   setFilterdBookings([...filteredBookings]);
@@ -59,10 +60,13 @@ useEffect(() => {
                   <Link
                     to={`/host/message?id=${booking.user}&&name=${booking.name}`}
                   >
-                    <button className="bg-green-500 m-2 ml-8 p-2 rounded-full text-lg">
+                    <button className="bg-green-500 m-1 px-3 py-2 rounded-full text-lg">
                       Message{" "}
                     </button>
                   </Link>
+                  <button className="bg-blue-500 p-2 rounded-full text-lg">
+                    Checked Out
+                  </button>
                 </div>
                 <div className="flex items-center">
                   <h1 className="text-md font-bold mb-2">

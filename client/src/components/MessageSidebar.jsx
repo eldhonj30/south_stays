@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useEffect } from "react";
 
-function MessageSidebar({history,changeRoom,socket}) {
-  console.log(socket);
+function MessageSidebar({ history, changeRoom, socket }) {
+  // useEffect(() => {
+  //   if (socket === null) return;
+  //   socket.on("newMessage", (data) => {
+  //     console.log(data);
+  //   });
+  // }, [socket]);
   return (
     <div className="bg-gray-300 ">
       <div className="flex p-2 gap-2">
@@ -49,4 +54,4 @@ function MessageSidebar({history,changeRoom,socket}) {
   );
 }
 
-export default MessageSidebar
+export default MessageSidebar;

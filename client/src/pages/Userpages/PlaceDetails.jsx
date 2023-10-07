@@ -5,6 +5,7 @@ import AddressLink from "../../components/UserComponents/AdressLink";
 import PlaceGallery from "../../components/UserComponents/PlaceGallery";
 import BookingWidget from "../../components/UserComponents/BookingWidget";
 import Calendar from "../../components/UserComponents/Calendar";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 function PlaceDetails() {
   const { id } = useParams();
@@ -19,13 +20,17 @@ function PlaceDetails() {
     axios.get(`/guest/place-details/${id}`).then((response) => {
       setPlace(response.data);
     });
-  }, []);
+  }, [place]);
+   if (!place) {
+     return <LoadingSpinner />;
+   }
   useEffect(() => {
     axios
       .get(`/guest/booked-dates?place=${id}`)
       .then(({ data }) => setBookings([...data]))
       .catch((error) => console.error("Error:", error));
   }, []);
+
   const toparent = (newState) => {
     setChildState(newState);
   };

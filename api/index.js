@@ -81,6 +81,7 @@ io.on("connection", (socket) => {
     
     if (user.length > 0) {
       io.to(user[0].socketId).emit("newMessage", data.message);
+      // io.to(user[0].socketId).emit("updateList",data.from) 
     }
   });
 

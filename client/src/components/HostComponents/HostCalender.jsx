@@ -5,8 +5,9 @@ import React from 'react'
 import interactionPlugin from "@fullcalendar/interaction";
 
 function HostCalender({bookings,setDate}) {
-    const today = new Date();
-    const nextYear = addMonths(today, 12);
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7)
+    const nextYear = addMonths(startDate, 12);
 
     const getDate = (info) => {
      setDate(info.dateStr)
@@ -16,7 +17,7 @@ function HostCalender({bookings,setDate}) {
     <FullCalendar
       plugins={[dayGridPlugin,interactionPlugin]}
       initialView="dayGridMonth"
-      validRange={{ start: today, end: nextYear }}
+      validRange={{ start: startDate, end: nextYear }}
       events={bookings.map((booking) => ({
         title: booking.status,
         start: new Date(booking.checkIn).toISOString().split("T")[0],
