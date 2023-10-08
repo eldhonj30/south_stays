@@ -7,7 +7,7 @@ function HostMesssageInput({ userId, updateMsg, uId }) {
   const [newMsg, setNewMsg] = useState("");
   const [url, setUrl] = useState("");
   const [thumb, setThumb] = useState("");
-  const [filetype,setFiletype] = useState('')
+  const [filetype, setFiletype] = useState("");
   const { host } = useContext(UserContext);
 
   const sendMsg = async () => {
@@ -16,20 +16,20 @@ function HostMesssageInput({ userId, updateMsg, uId }) {
       mySelf: true,
       message: newMsg,
       fileUrl: url,
-      filetype:filetype
+      filetype: filetype,
     };
-    const { data } = await axios.post("/message/guest", {
+    const { data } = await axios.post("/message/host", {
       hostId: host._id,
       userId: userId || uId,
       senderId: host._id,
       message: newMsg,
       fileUrl: url,
-      filetype:filetype
+      filetype: filetype,
     });
     setNewMsg("");
     setUrl("");
     setThumb("");
-    setFiletype('')
+    setFiletype("");
     updateMsg(latestMsg, data);
   };
 

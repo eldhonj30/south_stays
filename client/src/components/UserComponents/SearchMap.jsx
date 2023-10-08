@@ -1,11 +1,10 @@
-
 import React, { useState } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import ReactMapGl, { Marker } from "react-map-gl";
 import RoomIcon from "@mui/icons-material/Room";
 const Token = import.meta.env.VITE_REACT_APP_MAP_BOX;
 
-function SearchMap({ getLocation,lat,long }) {
+function SearchMap({ getLocation, lat, long }) {
   const [viewport, setViewport] = useState({
     latitude: lat || 9.931233,
     longitude: long || 76.267303,

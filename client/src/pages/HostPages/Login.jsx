@@ -18,7 +18,7 @@ function Login() {
       navigate("/host");
     }
     return () => {};
-  }, [host,ready]);
+  }, [host, ready]);
 
   if (!ready) {
     return <LoadingSpinner />;
@@ -51,6 +51,7 @@ function Login() {
           <input
             type="password"
             placeholder={"password"}
+            autocomplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

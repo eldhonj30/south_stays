@@ -57,6 +57,7 @@ const getMessage = asyncHandler(async (req, res) => {
           message: msg.message,
           fileUrl: msg.fileUrl,
           filetype: msg.filetype,
+          createdAt:msg.createdAt
         };
       });
     }
@@ -100,6 +101,7 @@ const changeChatRoom = asyncHandler(async (req, res) => {
         message: msg.message,
         fileUrl: msg.fileUrl,
         filetype: msg.filetype,
+        createdAt: msg.createdAt,
       };
     });
 

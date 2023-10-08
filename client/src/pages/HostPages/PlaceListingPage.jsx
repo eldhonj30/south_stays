@@ -18,7 +18,7 @@ function PlaceListingPage() {
         toast.error(error);
       });
   }, []);
-  
+
   return (
     <div className="mt-24 p-3">
       {places.length > 0 &&

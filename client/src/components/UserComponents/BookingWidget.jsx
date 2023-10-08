@@ -8,7 +8,6 @@ import { loadStripe } from "@stripe/stripe-js";
 
 const pKey = import.meta.env.VITE_REACT_APP_STRIPE;
 
-
 export default function BookingWidget({ place }) {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
@@ -16,7 +15,6 @@ export default function BookingWidget({ place }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [redirect, setRedirect] = useState("");
-  const [available, setAvailabilty] = useState(false);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
@@ -43,12 +41,6 @@ export default function BookingWidget({ place }) {
       new Date(checkIn)
     );
   }
-  let buttonClass;
-  if (available) {
-    buttonClass = "p-3 rounded-2xl bg-green-500 text-white";
-  } else {
-    buttonClass = "p-3 rounded-2xl bg-black text-white";
-  }
 
   const availability = async () => {
     if (!user) {
@@ -63,16 +55,19 @@ export default function BookingWidget({ place }) {
     if (numberOfGuests == "" || name.trim() === "" || phone === "") {
       return toast.error("please fill out all fields");
     }
-    const {data} = await axios.post("/guest/place-available",{checkIn,checkOut,place:place._id})
-    if(data){
-     payment()
+    const { data } = await axios.post("/guest/place-available", {
+      checkIn,
+      checkOut,
+      place: place._id,
+    });
+    if (data) {
+      payment();
     } else {
-      toast.error("oops ..! Sorry,Try another days")
+      toast.error("oops ..! Sorry,Try another days");
     }
-  }
+  };
 
   async function payment() {
-
     const bookingData = {
       checkIn,
       checkOut,
@@ -85,25 +80,23 @@ export default function BookingWidget({ place }) {
       price: numberOfNights * place.price,
     };
     const stringData = JSON.stringify(bookingData);
-    
+
     localStorage.setItem("bookingData", stringData);
     const stripe = await loadStripe(pKey);
-       
+
     const { data } = await axios.post("/guest/create-checkout-session", {
       name,
       price: numberOfNights * place.price,
       place: place._id,
     });
-  
-    const result = await stripe.redirectToCheckout({
-          sessionId: data.id,
-      });
-    if(result?.error) {
-      toast.error(result.error)
-    } 
-  }
 
- 
+    const result = await stripe.redirectToCheckout({
+      sessionId: data.id,
+    });
+    if (result?.error) {
+      toast.error(result.error);
+    }
+  }
 
   if (redirect) {
     return <Navigate to={redirect} />;
@@ -123,7 +116,7 @@ export default function BookingWidget({ place }) {
               value={checkIn}
               min={currentDate}
               onChange={(ev) => {
-                setCheckIn(ev.target.value), setAvailabilty(false);
+                setCheckIn(ev.target.value);
               }}
             />
           </div>
@@ -134,7 +127,7 @@ export default function BookingWidget({ place }) {
               value={checkOut}
               min={selectedDate}
               onChange={(ev) => {
-                setCheckOut(ev.target.value), setAvailabilty(false);
+                setCheckOut(ev.target.value);
               }}
             />
           </div>
@@ -176,11 +169,14 @@ export default function BookingWidget({ place }) {
           </div>
         )}
       </div>
-      {numberOfNights > 0 &&(<div>
-        <h3 className="text-orange-400 text-center">
-          Note :You have to pay booking charge of ₹ {(numberOfNights * place.price) * 0.10}, which is non-refundable
-        </h3>
-      </div>)}
+      {numberOfNights > 0 && (
+        <div>
+          <h3 className="text-orange-400 text-center">
+            Note :You have to pay booking charge of ₹{" "}
+            {numberOfNights * place.price * 0.1}, which is non-refundable
+          </h3>
+        </div>
+      )}
 
       <button onClick={availability} className="primary mt-4">
         Book this place

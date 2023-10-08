@@ -10,20 +10,19 @@ function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setAdmin,admin,ready } = useContext(UserContext);
+  const { setAdmin, admin, ready } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-   
     if (admin && ready) {
       navigate("/admin");
     }
     return () => {};
   }, []);
 
-    if (!ready) {
-      return <LoadingSpinner />;
-    }
+  if (!ready) {
+    return <LoadingSpinner />;
+  }
 
   const handleLogin = async (ev) => {
     ev.preventDefault();

@@ -1,21 +1,21 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { addMonths } from "date-fns";
-import React from 'react'
+import React from "react";
 import interactionPlugin from "@fullcalendar/interaction";
 
-function HostCalender({bookings,setDate}) {
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 7)
-    const nextYear = addMonths(startDate, 12);
+function HostCalender({ bookings, setDate }) {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - 7);
+  const nextYear = addMonths(startDate, 12);
 
-    const getDate = (info) => {
-     setDate(info.dateStr)
-    }
+  const getDate = (info) => {
+    setDate(info.dateStr);
+  };
 
   return (
     <FullCalendar
-      plugins={[dayGridPlugin,interactionPlugin]}
+      plugins={[dayGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
       validRange={{ start: startDate, end: nextYear }}
       events={bookings.map((booking) => ({
@@ -25,7 +25,7 @@ function HostCalender({bookings,setDate}) {
         allDay: true,
         backgroundColor: "red",
       }))}
-     dateClick={getDate}
+      dateClick={getDate}
     />
   );
 }

@@ -11,19 +11,19 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const { setUser,user, ready} = useContext(UserContext);
+  const { setUser, user, ready } = useContext(UserContext);
 
   useEffect(() => {
-     if (user && ready) {
-       navigate("/");
-     }
-  },[ready,user])
+    if (user && ready) {
+      navigate("/");
+    }
+  }, [ready, user]);
 
-     if (!ready) {
-       return <LoadingSpinner />;
-     }
+  if (!ready) {
+    return <LoadingSpinner />;
+  }
 
   const handleLogin = async (ev) => {
     ev.preventDefault();
@@ -31,13 +31,12 @@ function LoginPage() {
       const { data } = await axios.post("/guest/auth", { email, password });
       setUser(data);
       toast.success("Validation Success");
-      navigate('/')
+      navigate("/");
     } catch (err) {
       console.log(err);
       toast.error(err?.response?.data?.message);
     }
   };
-
 
   return (
     <div className="grow flex items-center justify-around">
@@ -53,6 +52,7 @@ function LoginPage() {
           <input
             type="password"
             placeholder={"password"}
+            autocomplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -75,7 +75,7 @@ function LoginPage() {
                 });
                 setUser(data);
                 toast.success("Validation Success");
-                navigate('/')
+                navigate("/");
               }}
               onError={() => {
                 console.log("Login Failed");

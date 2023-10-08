@@ -6,7 +6,7 @@ import axios from "axios";
 const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
 const HostHeader = () => {
-  const { setHost, host, socket,setSocket } = useContext(UserContext);
+  const { setHost, host, socket, setSocket } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [unreaded, setUnreaded] = useState(0);
@@ -25,32 +25,32 @@ const HostHeader = () => {
 
   useEffect(() => {
     if (host?._id) {
-    const newSocket = io(backendUrl);
-    setSocket(newSocket);
-     return () => {
-       newSocket.disconnect();
-     };
+      const newSocket = io(backendUrl);
+      setSocket(newSocket);
+      return () => {
+        newSocket.disconnect();
+      };
     }
   }, [host]);
-   useEffect(() => {
-     if (socket === null) return;
-     socket.emit("addNewUser", host._id);
-     socket.on("getOnlineUsers", (res) => {
-       setOnline(res);
-     });
-   }, [socket]);
-   useEffect(() => {
-     if (socket === null) return;
-     socket.on("newMessage", (data) => {
-       setUnreaded((prev) => prev + 1);
-     });
-   }, [socket]);
-   useEffect(() => {
-     if (socket === null) return;
-     socket.on("notification", () => {
-       setUnreaded(0);
-     });
-   }, [socket]);
+  useEffect(() => {
+    if (socket === null) return;
+    socket.emit("addNewUser", host._id);
+    socket.on("getOnlineUsers", (res) => {
+      setOnline(res);
+    });
+  }, [socket]);
+  useEffect(() => {
+    if (socket === null) return;
+    socket.on("newMessage", (data) => {
+      setUnreaded((prev) => prev + 1);
+    });
+  }, [socket]);
+  useEffect(() => {
+    if (socket === null) return;
+    socket.on("notification", () => {
+      setUnreaded(0);
+    });
+  }, [socket]);
 
   const handleLogout = () => {
     axios.post("/host/logout").then(() => {

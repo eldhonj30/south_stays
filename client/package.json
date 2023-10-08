@@ -26,6 +26,7 @@
     "dotenv": "^16.3.1",
     "jwt-decode": "^3.1.2",
     "mapbox-gl": "^2.15.0",
+    "moment": "^2.29.4",
     "rc-slider": "^10.2.1",
     "rc-tooltip": "^6.0.1",
     "react": "^18.2.0",

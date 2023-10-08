@@ -1,15 +1,14 @@
-import React from 'react'
+import React from "react";
 
-function Perks({selected,onChange}) {
-
+function Perks({ selected, onChange }) {
   const handleClick = (ev) => {
-    const {checked,name} = ev.target;
-    if(checked){
-      onChange([...selected,name])
+    const { checked, name } = ev.target;
+    if (checked) {
+      onChange([...selected, name]);
     } else {
-      onChange([...selected.filter(selectedName => selectedName !== name)])
+      onChange([...selected.filter((selectedName) => selectedName !== name)]);
     }
-  }
+  };
   return (
     <>
       <label className="border border-gray-400 p-4 flex rounded-2xl gap-2 items-center">
@@ -160,4 +159,4 @@ function Perks({selected,onChange}) {
   );
 }
 
-export default Perks
+export default Perks;

@@ -1,64 +1,64 @@
-import React, { useEffect, useState } from 'react'
-import SideBar from '../../components/AdminComponents/SideBar';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import SideBar from "../../components/AdminComponents/SideBar";
+import axios from "axios";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.css";
-import BookingModal from '../../components/AdminComponents/BookingModal';
-
+import BookingModal from "../../components/AdminComponents/BookingModal";
 
 function UserPage() {
-  const [users,setUsers] = useState([])
+  const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [bookings,setBookings] = useState([])
+  const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    axios.get('/admin/all-users').then((response) => {
-      
-      setUsers([...response.data])
-    }).catch((error) => {
-      console.log(error);
-    })
-  },[])
-// block and unblock user
-  const blockunBlock = ((id,block) => {
-  
-       let action;
-       {
-         block ? (action = "Unblocked") : (action = "blocked");
-       }
-       Swal.fire({
-         title: "Are you sure?",
-         text: `Your user will be ${action}`,
-         icon: "warning",
-         showCancelButton: true,
-         confirmButtonText: "OK",
-         cancelButtonText: "Cancel",
-       }).then((result) => {
-         if (result.isConfirmed) {
-          axios.post("/admin/block-manage", { id, block }).then(({ data }) => {
-            setUsers([...data]);
-          });
-           Swal.fire(`${action}`, `User is ${action}`, "success");
-         } else if (result.dismiss === Swal.DismissReason.cancel) {
-           Swal.fire("Cancelled", "Your data is safe.", "error");
-         }
-       });
-  })
-   const openModal = () => {
-     setShowModal(true);
-   };
+    axios
+      .get("/admin/all-users")
+      .then((response) => {
+        setUsers([...response.data]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  // block and unblock user
+  const blockunBlock = (id, block) => {
+    let action;
+    {
+      block ? (action = "Unblocked") : (action = "blocked");
+    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Your user will be ${action}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "OK",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.post("/admin/block-manage", { id, block }).then(({ data }) => {
+          setUsers([...data]);
+        });
+        Swal.fire(`${action}`, `User is ${action}`, "success");
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire("Cancelled", "Your data is safe.", "error");
+      }
+    });
+  };
+  const openModal = () => {
+    setShowModal(true);
+  };
 
-   const closeModal = () => {
-     setShowModal(false);
-   };
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   // get user bookings
   const getBookings = async (id) => {
-     const {data} = await axios.get(`/admin/user-bookings?id=${id}`);
-     setBookings([...data])
-     openModal()
-  }
- 
+    const { data } = await axios.get(`/admin/user-bookings?id=${id}`);
+    setBookings([...data]);
+    openModal();
+  };
+
   return (
     <div className="h-screen flex">
       <div>
@@ -122,4 +122,4 @@ function UserPage() {
   );
 }
 
-export default UserPage
+export default UserPage;

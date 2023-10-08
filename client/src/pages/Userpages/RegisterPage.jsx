@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, Navigate,useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
@@ -15,31 +15,31 @@ function RegisterPage() {
   const [redirect, setRedirect] = useState(false);
 
   const { setUser } = useContext(UserContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-   async function registerUser(ev) {
-     ev.preventDefault();
+  async function registerUser(ev) {
+    ev.preventDefault();
 
-     if (password === confrmPassword) {
-       try {
-         const res = await axios.post("/guest/register", {
-           name,
-           email,
-           password,
-         });
-         toast.success("Registration successfull")
-         setRedirect(true)
-       } catch (err) {
-         toast.error(err?.response?.data?.message);
-       }
-     } else {
-       toast.error("password doesn't match!");
-     }
-   }
+    if (password === confrmPassword) {
+      try {
+        const res = await axios.post("/guest/register", {
+          name,
+          email,
+          password,
+        });
+        toast.success("Registration successfull");
+        setRedirect(true);
+      } catch (err) {
+        toast.error(err?.response?.data?.message);
+      }
+    } else {
+      toast.error("password doesn't match!");
+    }
+  }
 
-   if(redirect){
-    return <Navigate to={'/login'} />
-   }
+  if (redirect) {
+    return <Navigate to={"/login"} />;
+  }
 
   return (
     <div className="mt-4 grow flex items-center justify-around">
@@ -89,9 +89,9 @@ function RegisterPage() {
                 const { data } = await axios.post("/guest/google-login", {
                   ...decoded,
                 });
-                setUser(data)
+                setUser(data);
                 toast.success("Validation Success");
-                navigate('/')
+                navigate("/");
               }}
               onError={() => {
                 console.log("Login Failed");

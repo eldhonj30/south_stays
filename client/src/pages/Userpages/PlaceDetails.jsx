@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams,Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import AddressLink from "../../components/UserComponents/AdressLink";
 import PlaceGallery from "../../components/UserComponents/PlaceGallery";
 import BookingWidget from "../../components/UserComponents/BookingWidget";
@@ -21,9 +21,9 @@ function PlaceDetails() {
       setPlace(response.data);
     });
   }, [place]);
-   if (!place) {
-     return <LoadingSpinner />;
-   }
+  if (!place) {
+    return <LoadingSpinner />;
+  }
   useEffect(() => {
     axios
       .get(`/guest/booked-dates?place=${id}`)
@@ -70,8 +70,12 @@ function PlaceDetails() {
           {place.extraInfo}
           <div className="mt-2">
             {place.owner && (
-              <Link to={`/message?id=${place.owner._id}&&name=${place.owner.name}`}>
-                <span className="text-lg text-blue-500 ">Lets Meet Your Host ?</span>
+              <Link
+                to={`/message?id=${place.owner._id}&&name=${place.owner.name}`}
+              >
+                <span className="text-lg text-blue-500 ">
+                  Lets Meet Your Host ?
+                </span>
               </Link>
             )}
           </div>

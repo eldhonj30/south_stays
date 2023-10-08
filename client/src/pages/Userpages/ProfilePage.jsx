@@ -6,22 +6,20 @@ import UserBookings from "../../components/UserComponents/UserBookings";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
 function ProfilePage() {
-
-  const { user, ready } = useContext(UserContext); 
+  const { user, ready } = useContext(UserContext);
   let { subpage } = useParams();
 
   if (subpage === undefined) {
     subpage = "profile";
   }
 
-   if (!user) {
-     return <LoadingSpinner />;
-   }
+  if (!user) {
+    return <LoadingSpinner />;
+  }
 
-
-  function linkClasses(type=null) {
+  function linkClasses(type = null) {
     let classes = "inline-flex gap-2 py-2 px-6 rounded-full ";
-    if (type === subpage ) {
+    if (type === subpage) {
       classes += "bg-gradient-to-l from-primary to-primary text-black ";
     } else {
       classes += "bg-gray-100 ";

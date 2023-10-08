@@ -14,7 +14,7 @@ function MessagePage() {
   const [receiver, setReceiver] = useState("");
   const [socket, setSocket] = useState(null);
   const [online, setOnline] = useState([]);
-  const [hId,setHId] = useState(null)
+  const [hId, setHId] = useState(null);
   const [msg, setMsg] = useState([]);
   const { user } = useContext(UserContext);
 
@@ -27,13 +27,13 @@ function MessagePage() {
   useEffect(() => {
     if (hostId) {
       axios
-        .get(`/message/chat/get-room/${userId}/${hostId}/${userId}`)
+        .get(`/message/guest/get-room/${userId}/${hostId}/${userId}`)
         .then(({ data }) => {
           setReceiver(hostName);
           setMsg(data.allMessage);
         });
     }
-    axios.get(`/message/history/${userId}`).then((response) => {
+    axios.get(`/message/guest/history/${userId}`).then((response) => {
       if (response.status === 201) {
         sethistory([...response.data]);
       }
@@ -76,9 +76,9 @@ function MessagePage() {
 
   const changeRoom = (roomId, todata) => {
     axios
-      .get(`/message/chat/change-room/${roomId}/${userId}`)
+      .get(`/message/guest/change-room/${roomId}/${userId}`)
       .then(({ data }) => {
-        setHId(todata._id)
+        setHId(todata._id);
         setReceiver(todata.name);
         setMsg(data.allMessage);
       });
@@ -86,7 +86,11 @@ function MessagePage() {
 
   return (
     <div className="flex-1 grid grid-cols-[1fr_2fr] md:grid-cols[1fr_1fr]">
-      <MessageSidebar history={history} changeRoom={changeRoom} socket={socket} />
+      <MessageSidebar
+        history={history}
+        changeRoom={changeRoom}
+        socket={socket}
+      />
 
       <div className="flex flex-col ">
         <div className="pl-3 p-2 h-16 bg-gray-400 rounded-md">

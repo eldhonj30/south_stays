@@ -10,7 +10,7 @@ const FeaturesSection = () => {
             className="w-full py-2"
             src="https://a0.muscache.com/im/pictures/65214d06-ffb4-4b70-93c0-01d368e76649.jpg?im_w=2560&im_q=highq"
             alt=""
-            style={{height:"350px"}}
+            style={{ height: "350px" }}
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 justify-items-center">

@@ -1,25 +1,21 @@
-import React, { useContext } from 'react'
-import { Link,useNavigate } from "react-router-dom";
-import axios from 'axios';
-import { UserContext } from '../../Contexts/UserContext';
-
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserContext } from "../../Contexts/UserContext";
 
 function AdminHeader() {
   const { setAdmin } = useContext(UserContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogOut = () => {
     axios.post("/admin/logout").then(() => {
-      setAdmin(null)
+      setAdmin(null);
       navigate("/admin/login");
     });
-  }
+  };
 
   return (
-    <header
-      className="fixed w-full"
-      style={{ backgroundColor: "#ffecec" }}
-    >
+    <header className="fixed w-full" style={{ backgroundColor: "#ffecec" }}>
       <div className="sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center">
@@ -43,29 +39,27 @@ function AdminHeader() {
           </div>
           <div className="flex items-center">
             <div className="ml-3 relative">
-      
-                <button
-                  className="flex justify-between items-center w-40 h-12 px-3  bg-primary text-white rounded-md"
-                  id="user-menu"
+              <button
+                className="flex justify-between items-center w-40 h-12 px-3  bg-primary text-white rounded-md"
+                id="user-menu"
+              >
+                <span className="text-md font-bold">South Stays</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                  onClick={handleLogOut}
                 >
-                  <span className="text-md font-bold">South Stays</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                    onClick={handleLogOut}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-                    />
-                  </svg>
-                </button>
-          
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -74,4 +68,4 @@ function AdminHeader() {
   );
 }
 
-export default AdminHeader
+export default AdminHeader;

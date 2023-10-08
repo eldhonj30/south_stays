@@ -3,7 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { addMonths } from "date-fns";
 
-const Calendar = ({place}) => {
+const Calendar = ({ place }) => {
   const today = new Date();
   const nextYear = addMonths(today, 12);
   return (

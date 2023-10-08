@@ -19,32 +19,32 @@ function HostPage() {
       .catch((error) => {
         console.log(error);
       });
-
   }, []);
 
   // Block and Unblock Host
 
   const blockunBlock = (id, block) => {
-    let action
-    {block ? action = "Unblocked" : action = "blocked"}
-  Swal.fire({
-    title: "Are you sure?",
-    text: `Your user will be ${action}`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "OK",
-    cancelButtonText: "Cancel",
-  }).then((result) => {
-    if (result.isConfirmed) {
+    let action;
+    {
+      block ? (action = "Unblocked") : (action = "blocked");
+    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Your user will be ${action}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "OK",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
         axios.post("/admin/host-manage", { id, block }).then(({ data }) => {
           setHosts([...data]);
         });
-      Swal.fire(`${action}`, `User is ${action}`, "success");
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-      Swal.fire("Cancelled", "Your data is safe.", "error");
-    }
-  });
-
+        Swal.fire(`${action}`, `User is ${action}`, "success");
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire("Cancelled", "Your data is safe.", "error");
+      }
+    });
   };
 
   const openModal = () => {

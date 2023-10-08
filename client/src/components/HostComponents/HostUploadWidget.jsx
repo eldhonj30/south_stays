@@ -1,25 +1,31 @@
-import {useEffect,useRef, useState} from 'react'
+import { useEffect, useRef, useState } from "react";
 
-export const HostUploadWidget = ({getFileUrl}) => {
-
-  const cloudinaryRef = useRef()
-  const widgetRef = useRef()
-  const [demo,setDemo] = useState('')
+export const HostUploadWidget = ({ getFileUrl }) => {
+  const cloudinaryRef = useRef();
+  const widgetRef = useRef();
+  const [demo, setDemo] = useState("");
 
   useEffect(() => {
     cloudinaryRef.current = window.cloudinary;
-    widgetRef.current = cloudinaryRef.current.createUploadWidget({
-      cloudName: "dyyqku2vc",
-      uploadPreset: "miyxu5ot",
-    },function(error,result) {
+    widgetRef.current = cloudinaryRef.current.createUploadWidget(
+      {
+        cloudName: "dyyqku2vc",
+        uploadPreset: "miyxu5ot",
+      },
+      function (error, result) {
         if (!error && result && result.event === "success") {
-          getFileUrl(result.info.url, result.info.thumbnail_url,result.info.resource_type);
+          getFileUrl(
+            result.info.url,
+            result.info.thumbnail_url,
+            result.info.resource_type
+          );
         }
-    });
-  },[setDemo])
-  
+      }
+    );
+  }, [setDemo]);
+
   return (
-    <div >
+    <div>
       <button
         className="flex gap-2 px-4 py-2 bg-blue-400   rounded-xl text-lg"
         onClick={() => widgetRef.current.open()}
@@ -42,5 +48,4 @@ export const HostUploadWidget = ({getFileUrl}) => {
       </button>
     </div>
   );
-}
-
+};

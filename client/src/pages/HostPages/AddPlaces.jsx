@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Perks from "../../components/HostComponents/Perks";
 import PhotosUploader from "../../components/HostComponents/PhotosUploader";
-import GMap from "../../components/GMap"
+import GMap from "../../components/GMap";
 import { toast } from "react-toastify";
 import AddressSearch from "../../components/HostComponents/AddressSearch";
 import Modal from "react-responsive-modal";
@@ -21,8 +21,8 @@ function AddPlaces() {
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(1);
   const [price, setPrice] = useState(100);
-  const [map,setMap] = useState(false)
-  const [location,setLocation] = useState(null)
+  const [map, setMap] = useState(false);
+  const [location, setLocation] = useState(null);
 
   const navigate = useNavigate();
 
@@ -43,33 +43,32 @@ function AddPlaces() {
         setCheckIn(data.checkIn);
         setCheckOut(data.checkOut);
         setMaxGuests(data.maxGuests);
-        setPrice(data.price)
-        setLocation(data.location)
+        setPrice(data.price);
+        setLocation(data.location);
       })
       .catch((err) => {
-        
-        toast.error("Please fill out all the fields")
+        toast.error("Please fill out all the fields");
       });
   }, [id]);
 
   const openMap = (evnt) => {
-    evnt.preventDefault()
-    setMap(true)
-  }
+    evnt.preventDefault();
+    setMap(true);
+  };
 
   const closeMap = () => {
-    if(!location) toast.error("Please select Place's location")
-    setMap(false)
-  }
+    if (!location) toast.error("Please select Place's location");
+    setMap(false);
+  };
 
   const getAddress = (data) => {
-    setAddress(data)
-  }
-  
+    setAddress(data);
+  };
+
   const getLocation = (data) => {
-    if(!data) return
+    if (!data) return;
     setLocation(data);
-  }
+  };
 
   const savePlace = async (ev) => {
     ev.preventDefault();
@@ -84,7 +83,7 @@ function AddPlaces() {
       checkOut,
       maxGuests,
       price,
-      location
+      location,
     };
 
     if (id) {
@@ -215,7 +214,12 @@ function AddPlaces() {
       </div>
       <Modal open={map} onClose={closeMap} center>
         <GMap getLocation={getLocation} />
-        <button onClick={closeMap} className="absolute bottom-8 right-16 p-2 bg-primary rounded">Select</button>
+        <button
+          onClick={closeMap}
+          className="absolute bottom-8 right-16 p-2 bg-primary rounded"
+        >
+          Select
+        </button>
       </Modal>
     </div>
   );

@@ -6,13 +6,13 @@ export default function PlaceGallery({ place, toparent }) {
 
   const closeImage = () => {
     setShowAllPhotos(false);
-    toparent(showAllPhotos)
-  }
+    toparent(showAllPhotos);
+  };
 
   const openImage = () => {
     setShowAllPhotos(true);
-    toparent(showAllPhotos)
-  }
+    toparent(showAllPhotos);
+  };
 
   if (showAllPhotos) {
     return (
@@ -41,7 +41,7 @@ export default function PlaceGallery({ place, toparent }) {
           </div>
           {place?.photos?.length > 0 &&
             place.photos.map((photo) => (
-              <div style={{width:"700px", alignSelf:"center"}}>
+              <div style={{ width: "700px", alignSelf: "center" }}>
                 <Image src={photo} alt="" />
               </div>
             ))}
@@ -52,7 +52,10 @@ export default function PlaceGallery({ place, toparent }) {
 
   return (
     <div className="relative">
-      <div className="grid gap-2 grid-cols-[1fr_1fr] m-0 rounded-3xl overflow-hidden" style={{height:"400px"}}>
+      <div
+        className="grid gap-2 grid-cols-[1fr_1fr] m-0 rounded-3xl overflow-hidden"
+        style={{ height: "400px" }}
+      >
         <div>
           {place.photos?.[0] && (
             <div>
@@ -67,12 +70,12 @@ export default function PlaceGallery({ place, toparent }) {
         </div>
         <div className="grid gap-2">
           {place.photos?.[1] && (
-              <Image
-                onClick={openImage}
-                className="aspect-square cursor-pointer object-cover"
-                src={place.photos[1]}
-                alt=""
-              />
+            <Image
+              onClick={openImage}
+              className="aspect-square cursor-pointer object-cover"
+              src={place.photos[1]}
+              alt=""
+            />
           )}
           {/* <div className="overflow-hidden">
             {place.photos?.[2] && (

@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-function HostMessageSidebar({history,changeRoom}) {
+function HostMessageSidebar({ history, changeRoom }) {
   return (
     <div className="bg-gray-300 ">
       <div className="flex p-2 gap-2">
@@ -48,4 +48,4 @@ function HostMessageSidebar({history,changeRoom}) {
   );
 }
 
-export default HostMessageSidebar
+export default HostMessageSidebar;

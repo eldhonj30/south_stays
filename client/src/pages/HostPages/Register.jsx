@@ -17,7 +17,7 @@ function Register() {
   const [otp, setOtp] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [open, setOpen] = useState(false);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [seconds, setSeconds] = useState(0);
 
   const onOpenModal = () => {
@@ -27,19 +27,18 @@ function Register() {
     setOpen(false);
   };
 
-
   async function registerUser(ev) {
     ev.preventDefault();
     if (password === confrmPassword) {
       setLoading(true);
       try {
-        const {data} = await axios.post("/host/signup", {
+        const { data } = await axios.post("/host/signup", {
           name,
           email,
           password,
         });
-        setLoading(false)
-        toast.success(data.message)
+        setLoading(false);
+        toast.success(data.message);
         setSeconds(60);
         onOpenModal();
       } catch (err) {
@@ -57,28 +56,31 @@ function Register() {
   }
 
   const otpVerify = () => {
-    axios.post('/host/otp-verify',{otp,email}).then((response) => {
-        const {data} = response
-        toast.success(data.message)
-        setRedirect(true)
-    }).catch((err) => {
-      console.log(err)
-      toast.error(err.response.data.message)
-    })
-  }
+    axios
+      .post("/host/otp-verify", { otp, email })
+      .then((response) => {
+        const { data } = response;
+        toast.success(data.message);
+        setRedirect(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message);
+      });
+  };
 
   const otpResend = () => {
     axios.post("/host/otp-resend").then((response) => {
       setSeconds(60);
     });
-  }
+  };
 
-  if(seconds<=60){
-       const timer = setTimeout(() => {
-         if (seconds > 0) {
-           setSeconds(seconds - 1);
-         }
-       }, 1000);
+  if (seconds <= 60) {
+    const timer = setTimeout(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+    }, 1000);
   }
 
   const displayTime = () => {
@@ -86,7 +88,6 @@ function Register() {
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
-
 
   return (
     <div className="mt-4 grow flex items-center justify-around">

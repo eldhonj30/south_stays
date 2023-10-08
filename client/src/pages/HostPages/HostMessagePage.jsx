@@ -26,40 +26,22 @@ function HostMessagePage() {
   useEffect(() => {
     if (userId) {
       axios
-        .get(`/message/chat/get-room/${userId}/${hostId}/${hostId}`)
+        .get(`/message/host/get-room/${userId}/${hostId}/${hostId}`)
         .then(({ data }) => {
           setReceiver(userName);
           setMsg(data.allMessage);
         });
     }
-    axios.get(`/message/history/${hostId}`).then((response) => {
+    axios.get(`/message/host/history/${hostId}`).then((response) => {
       if (response.status === 201) {
         sethistory([...response.data]);
       }
     });
   }, []);
-  // socket connection initialization
-  // useEffect(() => {
-  //   if(socket !== null) return
-  //   const newSocket = io(backendUrl);
-  //   setSocket(newSocket);
-
-  //   return () => {
-  //     newSocket.disconnect();
-  //   };
-  // }, [host]);
-  // useEffect(() => {
-  //   if (socket === null ) return;
-  //   socket.emit("addNewUser", hostId);
-  //   socket.on("getOnlineUsers", (res) => {
-  //     setOnline(res);
-  //   });
-  // }, [socket]);
 
   useEffect(() => {
     if (socket === null) return;
     socket.on("newMessage", (data) => {
-      
       data.mySelf = false;
       setMsg((prevMessages) => [...prevMessages, data]);
     });
@@ -75,9 +57,9 @@ function HostMessagePage() {
   };
 
   const changeRoom = (roomId, todata) => {
-       socket.emit("updateUnread", host);
+    socket.emit("updateUnread", host);
     axios
-      .get(`/message/chat/change-room/${roomId}/${hostId}`)
+      .get(`/message/host/change-room/${roomId}/${hostId}`)
       .then(({ data }) => {
         setReceiver(todata.name);
         setUId(todata._id);

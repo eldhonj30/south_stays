@@ -1,28 +1,28 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import {Link,useLocation,useNavigate} from "react-router-dom"
-import LoadingSpinner from '../../components/LoadingSpinner'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
 function IndexPage() {
-  const [places,setPlaces] = useState([])
-  const navigate = useNavigate()
-  
-   const location = useLocation();
-   let data = location.state;
+  const [places, setPlaces] = useState([]);
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  let data = location.state;
   useEffect(() => {
-    if(data?.length){
-      setPlaces(data)
-    } else{
-       axios.get("/admin/all-places").then((response) => {
-         setPlaces(response.data);
-       });
+    if (data?.length) {
+      setPlaces(data);
+    } else {
+      axios.get("/admin/all-places").then((response) => {
+        setPlaces(response.data);
+      });
     }
-  },[data,places])
+  }, [data, places]);
 
   if (!places?.length) {
-      return <LoadingSpinner />;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -30,7 +30,7 @@ function IndexPage() {
       {places.length > 0 &&
         places.map((place, index) => (
           <div key={index}>
-            <Link to={'/placedetails/'+place._id}>
+            <Link to={"/placedetails/" + place._id}>
               <div className="bg-gray-500 rounded-2xl flex ">
                 {place?.photos.length && (
                   <img
@@ -52,4 +52,4 @@ function IndexPage() {
   );
 }
 
-export default IndexPage
+export default IndexPage;

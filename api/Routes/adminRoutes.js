@@ -22,8 +22,8 @@ router.post("/block-manage", adminAuth, blockUnblock);
 
 router.get("/all-hosts", adminAuth, allHosts);
 router.post("/host-manage", adminAuth, hostBlockUnBlock);
-router.get("/user-bookings",getUserBookings) 
-router.get("/host-bookings",gethostBookings) 
+router.get("/user-bookings",adminAuth,getUserBookings) 
+router.get("/host-bookings",adminAuth,gethostBookings) 
 
 
 export default router; 

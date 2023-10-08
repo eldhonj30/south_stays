@@ -139,6 +139,18 @@ const cancelBooking = asyncHandler(async (req, res) => {
   }
 });
 
+const confrmCheckout = asyncHandler(async (req,res) => {
+  const {id} = req.body
+ try {
+   await BookingModel.findByIdAndUpdate(id, {
+     $set: { status: "Checked-out" },
+   });
+   return res.status(201).json({ message: "status changed" });
+ } catch (error) {
+  console.log(error);
+ }
+})
+
 export {
   bookPlace,
   isAvailable,
@@ -146,4 +158,5 @@ export {
   gethostBookings,
   cancelBooking,
   placeWiseBooking,
+  confrmCheckout
 };

@@ -1,18 +1,16 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import PlaceImage from './PlaceImage';
-import BookingDates from './BookingDates';
-import { Link } from 'react-router-dom';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import PlaceImage from "./PlaceImage";
+import BookingDates from "./BookingDates";
+import { Link } from "react-router-dom";
 
 function UserBookings() {
-
-  const [bookings,setBookings] = useState([])
+  const [bookings, setBookings] = useState([]);
   useEffect(() => {
     axios.get("/guest/bookings").then((response) => {
-      setBookings(response.data)
+      setBookings(response.data);
     });
-  },[])
-
+  }, []);
 
   return (
     <div className="px-32 py-8">
@@ -63,9 +61,15 @@ function UserBookings() {
               </div>
             )}
           </Link>
-        ))):(<div className='text-center text-2xl font-bold mt-10'> <h2>Ooops ...! No bookings</h2> </div>)}
+        ))
+      ) : (
+        <div className="text-center text-2xl font-bold mt-10">
+          {" "}
+          <h2>Ooops ...! No bookings</h2>{" "}
+        </div>
+      )}
     </div>
   );
 }
 
-export default UserBookings
+export default UserBookings;

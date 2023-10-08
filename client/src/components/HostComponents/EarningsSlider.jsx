@@ -8,13 +8,13 @@ import { useMediaQuery } from "react-responsive";
 
 const EarningsSlider = () => {
   const [earning, setEarning] = useState(17500);
-  const [day,setDay] = useState(7) 
+  const [day, setDay] = useState(7);
 
   const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const handleSliderChange = (value) => {
     setEarning(2500 * value);
-    setDay(value)
+    setDay(value);
   };
 
   const handleTooltipVisibleChange = (visible) => {
@@ -22,7 +22,6 @@ const EarningsSlider = () => {
       setEarning(Math.round(earning / 50) * 50);
     }
   };
-
 
   return (
     <div className="flex justify-center">

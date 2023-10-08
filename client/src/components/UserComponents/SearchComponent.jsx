@@ -13,8 +13,8 @@ function SearchComponent() {
   const [loc, setLoc] = useState(null);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [guest,setGuest] = useState(0)
-  const [show,setShow] = useState(false)
+  const [guest, setGuest] = useState(0);
+  const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ function SearchComponent() {
   };
 
   const openMap = () => {
-    setShow(false)
+    setShow(false);
     setMap(true);
   };
 
@@ -68,20 +68,20 @@ function SearchComponent() {
     const { data } = await axios.get(
       `/guest/search-place-location?lat=${loc.lat}&&long=${loc.lng}`
     );
-     if (!data?.length) {
-       toast.error("Oops ..! No Matching data");
-     }
+    if (!data?.length) {
+      toast.error("Oops ..! No Matching data");
+    }
     navigate("/", { state: data });
-    setLat(null)
-    setLong(null)
-    setLoc(null)
+    setLat(null);
+    setLong(null);
+    setLoc(null);
     closeMap();
   };
 
   // functions for search by date
 
   const openCalender = () => {
-    setShow(false)
+    setShow(false);
     setCalender(true);
   };
   const closeCalender = () => {
@@ -89,29 +89,33 @@ function SearchComponent() {
   };
 
   const searchByDate = async () => {
-    const {data} = await axios.get(`/guest/search-place-date?In=${checkIn}&&Out=${checkOut}`)
-     if (!data?.length) {
-       toast.error("Oops ..! No Matching data");
-     }
-      navigate("/", { state: data });
+    const { data } = await axios.get(
+      `/guest/search-place-date?In=${checkIn}&&Out=${checkOut}`
+    );
+    if (!data?.length) {
+      toast.error("Oops ..! No Matching data");
+    }
+    navigate("/", { state: data });
 
-      setCheckIn('')
-      setCheckOut('')
-      closeCalender();
+    setCheckIn("");
+    setCheckOut("");
+    closeCalender();
   };
 
   // functions for search by No of guest
 
   const searchByGuest = async () => {
-    if(!guest) return toast.error("fill your guest number")
-    const {data} = await axios.get(`/guest/search-place-guest?guest=${guest}`)
-    if(!data?.length){
-      toast.error("Oops ..! No Matching data")
+    if (!guest) return toast.error("fill your guest number");
+    const { data } = await axios.get(
+      `/guest/search-place-guest?guest=${guest}`
+    );
+    if (!data?.length) {
+      toast.error("Oops ..! No Matching data");
     }
     navigate("/", { state: data });
-    setGuest(0)
-    setShow(false)
-  }
+    setGuest(0);
+    setShow(false);
+  };
   return (
     <div className="flex gap-2 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-300">
       <div onClick={requestLocation} className="hover:cursor-pointer">

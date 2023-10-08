@@ -46,7 +46,7 @@ import ReactMapGl, { Marker } from "react-map-gl";
 import RoomIcon from "@mui/icons-material/Room";
 const Token = import.meta.env.VITE_REACT_APP_MAP_BOX;
 
-function GMap({getLocation}) {
+function GMap({ getLocation }) {
   const [viewport, setViewport] = useState({
     latitude: 9.931233,
     longitude: 76.267303,
@@ -55,15 +55,15 @@ function GMap({getLocation}) {
   const [newplace, setNewplace] = useState(null);
 
   function handleClick(e) {
-   const lat = e.lngLat.lat
-   const lng = e.lngLat.lng
+    const lat = e.lngLat.lat;
+    const lng = e.lngLat.lng;
     setNewplace({
       lat,
       lng,
     });
   }
 
-  getLocation(newplace)
+  getLocation(newplace);
 
   return (
     <div style={{ width: "500px", height: "500px", zIndex: 999 }}>

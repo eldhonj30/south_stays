@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const HeroSection = () => {
-  const { setHost,host } = useContext(UserContext);
+  const { setHost, host } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -31,7 +31,10 @@ const HeroSection = () => {
         </p>
         {host?.name ? (
           <Link>
-            <button onClick={handleLogout} className="mt-8 px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600">
+            <button
+              onClick={handleLogout}
+              className="mt-8 px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600"
+            >
               Logout
             </button>
           </Link>

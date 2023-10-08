@@ -1,16 +1,14 @@
-import React from 'react'
-import { NavLink, useLocation } from 'react-router-dom';
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
 
-
-
-function SideBar() {  
-  const location = useLocation()
+function SideBar() {
+  const location = useLocation();
   let path = location.pathname.split("/")[2];
 
   return (
     <div
       className="mt-16  w-56 text-black border flex flex-col"
-      style={{ height: "555px",backgroundColor: "#ffecec" }}  
+      style={{ height: "555px", backgroundColor: "#ffecec" }}
     >
       <NavLink
         to={"/admin"}
@@ -26,7 +24,7 @@ function SideBar() {
       </NavLink>
       <NavLink
         to={"/admin/host"}
-        className={path === "host" ? "text-blue-500 p-4" : "p-4"} 
+        className={path === "host" ? "text-blue-500 p-4" : "p-4"}
       >
         Host
       </NavLink>
@@ -34,4 +32,4 @@ function SideBar() {
   );
 }
 
-export default SideBar
+export default SideBar;

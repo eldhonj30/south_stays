@@ -1,48 +1,47 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import {toast} from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import AddressLink from '../../components/UserComponents/AdressLink'
-import PlaceGallery from '../../components/UserComponents/PlaceGallery'
-import BookingDates from '../../components/UserComponents/BookingDates'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import AddressLink from "../../components/UserComponents/AdressLink";
+import PlaceGallery from "../../components/UserComponents/PlaceGallery";
+import BookingDates from "../../components/UserComponents/BookingDates";
 
 function BookingDetailsPage() {
+  const { id } = useParams();
 
-  const {id} = useParams()
-  
-  const [booking,setBooking] = useState(null)
-  const navigate = useNavigate()
+  const [booking, setBooking] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if(id) {
-      axios.get('/guest/bookings').then(response => {
-       const foundBooking = response.data.find(({_id}) => id === _id)
-       if(foundBooking) {
-        setBooking(foundBooking)
-       }
-      })
+    if (id) {
+      axios.get("/guest/bookings").then((response) => {
+        const foundBooking = response.data.find(({ _id }) => id === _id);
+        if (foundBooking) {
+          setBooking(foundBooking);
+        }
+      });
     }
-  },[id])
+  }, [id]);
 
-    const handleCancel = (id) => {
-      axios
-        .put("/guest/cancel-booking", { id, status: "cancelled" })
-        .then((response) => {
-          if(response.data){
-              navigate('/profile/bookings')
-          } else {
-            toast.error('Cancelling time exceeded')
-          }
-        });
-    };
+  const handleCancel = (id) => {
+    axios
+      .put("/guest/cancel-booking", { id, status: "cancelled" })
+      .then((response) => {
+        if (response.data) {
+          navigate("/profile/bookings");
+        } else {
+          toast.error("Cancelling time exceeded");
+        }
+      });
+  };
 
-  if(!booking) {
-    return ""
+  if (!booking) {
+    return "";
   }
   let statusClass;
-  if(booking.status === "booked") {
-    statusClass = "text-green-800 text-2xl font-bold"
+  if (booking.status === "booked") {
+    statusClass = "text-green-800 text-2xl font-bold";
   } else {
     statusClass = "text-red-800 text-2xl font-bold";
   }
@@ -57,7 +56,7 @@ function BookingDetailsPage() {
         </div>
         <div className="flex-col items-center gap-1">
           <h2 className="text-xl">Your payment information : </h2>
-          <div className='flex gap-1'>
+          <div className="flex gap-1">
             <p>Advance : ₹ {booking.price * 0.1}</p> |
             <p>Balance : ₹ {booking.price - booking.price * 0.1}</p>
           </div>
@@ -98,4 +97,4 @@ function BookingDetailsPage() {
   );
 }
 
-export default BookingDetailsPage
+export default BookingDetailsPage;

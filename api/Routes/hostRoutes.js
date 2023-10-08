@@ -20,7 +20,7 @@ import {
   editPlace,
 } from "../Controllers/placeControllers.js";
 
-import { gethostBookings } from "../Controllers/bookingControllers.js";
+import { gethostBookings,confrmCheckout } from "../Controllers/bookingControllers.js";
 
 const router = express.Router();
 
@@ -48,5 +48,6 @@ router.get("/edit-place/:id",hostAuth, getPlace);
 router.put("/edit-place",hostAuth, editPlace);
 router.get("/user-places", hostAuth, userPlaces);
 router.get("/bookings",hostAuth,gethostBookings);
+router.post("/confirm-checkout",hostAuth,confrmCheckout);
 
 export default router;
