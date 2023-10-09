@@ -80,8 +80,8 @@ io.on("connection", (socket) => {
     const user = onlineUsers.filter((user) => user.userId === data.to);
     
     if (user.length > 0) {
-      io.to(user[0].socketId).emit("newMessage", data.message);
-      // io.to(user[0].socketId).emit("updateList",data.from) 
+      io.to(user[0].socketId).emit("newMessage", data.message,data.from);
+      io.to(user[0].socketId).emit("updateList",data.from,data.chatId); 
     }
   });
 

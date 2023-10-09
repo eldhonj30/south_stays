@@ -1,12 +1,6 @@
 import React, { useEffect } from "react";
 
-function MessageSidebar({ history, changeRoom, socket }) {
-  // useEffect(() => {
-  //   if (socket === null) return;
-  //   socket.on("newMessage", (data) => {
-  //     console.log(data);
-  //   });
-  // }, [socket]);
+function MessageSidebar({ history, changeRoom }) {
   return (
     <div className="bg-gray-300 ">
       <div className="flex p-2 gap-2">

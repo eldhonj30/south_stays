@@ -2,6 +2,10 @@ import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import AdminModel from "../Models/adminModel.js";
 import adminToken from "../utils/adminToken.js";
+import HostModel from "../Models/hostModel.js";
+import UserModel from "../Models/userModel.js";
+import PlaceModel from "../Models/placeModel.js";
+import BookingModel from "../Models/bookingModel.js";
 
 const adminLogin = asyncHandler(async (req, res) => {
   const email = req.body.email.trim();
@@ -46,4 +50,55 @@ const adminLogout = asyncHandler(async (req, res) => {
   return res.status(200).json({ message: "User Logged Out" });
 });
 
-export { adminLogin, adminInfo, adminLogout };
+const dashboardCount = asyncHandler(async (req, res) => {
+  try {
+    const hostCount = await HostModel.find().countDocuments();
+    const guestCount = await UserModel.find().countDocuments();
+    const placeCount = await PlaceModel.find().countDocuments();
+
+    res.status(200).json({ hostCount, guestCount, placeCount });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const bargraph = asyncHandler( async (req,res) => {
+  try {
+    const revenue = await BookingModel.aggregate([
+      {
+        $match: {
+          status: "Checked-out",
+        },
+      },
+      {
+        $addFields: {
+          month: { $month: "$checkOut" },
+          price_10_percent: { $multiply: ["$price", 0.1] },
+        },
+      },
+      {
+        $group: {
+          _id: { month: "$month" },
+          price_10_percent_monthly: { $sum: "$price_10_percent" },
+        },
+      },
+      {
+        $project: {
+          _id: 0, 
+          month: "$_id.month",
+          price_10_percent_monthly: 1,
+        },
+      },
+      {
+        $sort: {
+          month: 1,
+        },
+      },
+    ]);
+   res.status(201).json(revenue)
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+export { adminLogin, adminInfo, adminLogout, dashboardCount, bargraph };

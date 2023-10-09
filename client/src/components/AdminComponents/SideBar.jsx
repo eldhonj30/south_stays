@@ -8,7 +8,7 @@ function SideBar() {
   return (
     <div
       className="mt-16  w-56 text-black border flex flex-col"
-      style={{ height: "555px", backgroundColor: "#ffecec" }}
+      style={{ height: "555px", backgroundColor: "#fccdcd" }}
     >
       <NavLink
         to={"/admin"}

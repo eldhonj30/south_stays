@@ -1,25 +1,24 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { io } from "socket.io-client";
 
 import HostMesssageInput from "../../components/HostComponents/HostMesssageInput";
 import HostMessageSidebar from "../../components/HostComponents/HostMessageSidebar";
 import HostMessage from "../../components/HostComponents/HostMessage";
 import { UserContext } from "../../Contexts/UserContext";
-const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
 function HostMessagePage() {
   const [history, sethistory] = useState([]);
   const [receiver, setReceiver] = useState("");
   const [msg, setMsg] = useState([]);
   const [uId, setUId] = useState(null);
-
+  const toRef = useRef(null);
   const { host, socket } = useContext(UserContext);
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   let userId = searchParams.get("id");
+  if (userId) toRef.current = userId;
   const userName = searchParams.get("name");
   const hostId = host._id;
 
@@ -41,9 +40,11 @@ function HostMessagePage() {
 
   useEffect(() => {
     if (socket === null) return;
-    socket.on("newMessage", (data) => {
-      data.mySelf = false;
-      setMsg((prevMessages) => [...prevMessages, data]);
+    socket.on("newMessage", (message, from) => {
+      if (toRef.current == from) {
+        message.mySelf = false;
+        setMsg((prevMessages) => [...prevMessages, message]);
+      }
     });
   }, [socket]);
   const updateMsg = (data, response) => {
@@ -56,13 +57,27 @@ function HostMessagePage() {
     });
   };
 
+  useEffect(() => {
+    if (socket === null) return;
+    socket.on("updateList", (from, id) => {
+      axios.get(`/message/host/history/${hostId}`).then((response) => {
+      if (response.status === 201){
+        if (toRef.current != from) response.data[0].unread = true;
+        sethistory([...response.data]);
+      } 
+      })
+    });
+  }, [socket]);
+
   const changeRoom = (roomId, todata) => {
     socket.emit("updateUnread", host);
+    history[0].unread = false
     axios
       .get(`/message/host/change-room/${roomId}/${hostId}`)
       .then(({ data }) => {
         setReceiver(todata.name);
         setUId(todata._id);
+        toRef.current = todata._id;
         setMsg(data.allMessage);
       });
   };

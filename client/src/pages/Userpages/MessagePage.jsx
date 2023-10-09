@@ -17,10 +17,11 @@ function MessagePage() {
   const [hId, setHId] = useState(null);
   const [msg, setMsg] = useState([]);
   const { user } = useContext(UserContext);
-
+  const toRef = useRef(null)
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const hostId = searchParams.get("id");
+  if(hostId) toRef.current = hostId
   const hostName = searchParams.get("name");
   const userId = user._id;
 
@@ -58,11 +59,25 @@ function MessagePage() {
 
   useEffect(() => {
     if (socket === null) return;
-    socket.on("newMessage", (data) => {
-      data.mySelf = false;
-      setMsg((prevMessages) => [...prevMessages, data]);
+    socket.on("newMessage", (message,from) => {
+     if(toRef.current == from){
+       message.mySelf = false;
+       setMsg((prevMessages) => [...prevMessages, message]);
+    }
     });
   }, [socket]);
+
+    useEffect(() => {
+      if (socket === null) return;
+      socket.on("updateList", (from, id) => {
+        axios.get(`/message/guest/history/${userId}`).then((response) => {
+          if (response.status === 201) {
+           if (toRef.current != from) response.data[0].unread = true;
+           sethistory([...response.data]);
+          }
+        });
+      });
+    }, [socket]);
 
   const updateMsg = (data, response) => {
     setMsg([...msg, data]);
@@ -75,10 +90,12 @@ function MessagePage() {
   };
 
   const changeRoom = (roomId, todata) => {
+      history[0].unread = false;
     axios
       .get(`/message/guest/change-room/${roomId}/${userId}`)
       .then(({ data }) => {
         setHId(todata._id);
+        toRef.current = todata._id
         setReceiver(todata.name);
         setMsg(data.allMessage);
       });

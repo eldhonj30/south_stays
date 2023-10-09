@@ -20,7 +20,7 @@ function Message({ msg }) {
     message.time = durationInmnts
       ? durationInmnts + " minutes ago"
       : "Just now";
-    if (durationInhrs > 1) message.time = durationIndays + " Hrs ago";
+    if (durationInhrs > 1) message.time = durationInhrs + " Hrs ago";
     if (durationIndays > 1) message.time = durationIndays + " days ago";
     return message;
   });
