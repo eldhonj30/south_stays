@@ -56,13 +56,13 @@ const dashboardCount = asyncHandler(async (req, res) => {
     const guestCount = await UserModel.find().countDocuments();
     const placeCount = await PlaceModel.find().countDocuments();
 
-    res.status(200).json({ hostCount, guestCount, placeCount });
+    return res.status(200).json({ hostCount, guestCount, placeCount });
   } catch (error) {
     console.log(error);
   }
 });
 
-const bargraph = asyncHandler( async (req,res) => {
+const monthlyIncome = asyncHandler(async (req, res) => {
   try {
     const revenue = await BookingModel.aggregate([
       {
@@ -84,7 +84,7 @@ const bargraph = asyncHandler( async (req,res) => {
       },
       {
         $project: {
-          _id: 0, 
+          _id: 0,
           month: "$_id.month",
           price_10_percent_monthly: 1,
         },
@@ -95,10 +95,82 @@ const bargraph = asyncHandler( async (req,res) => {
         },
       },
     ]);
-   res.status(201).json(revenue)
+    return res.status(201).json(revenue);
   } catch (error) {
     console.log(error);
   }
-})
+});
 
-export { adminLogin, adminInfo, adminLogout, dashboardCount, bargraph };
+const monthlyBookings = asyncHandler(async (req, res) => {
+  const booking = await BookingModel.aggregate([
+    {
+      $addFields: {
+        month: { $month: "$checkIn" },
+      },
+    },
+    {
+      $group: {
+        _id: { month: "$month" },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $sort: {
+        "_id.month": 1,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        month: "$_id.month",
+        count: 1,
+      },
+    },
+  ]);
+  return res.status(201).json(booking);
+});
+
+const placeBookings = asyncHandler(async (req, res) => {
+  const bookings = await BookingModel.aggregate([
+    {
+      $group: {
+        _id: { place: "$place" },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $lookup: {
+        from: "places",
+        localField: "_id.place",
+        foreignField: "_id",
+        as: "place_name",
+      },
+    },
+    {
+      $unwind: "$place_name",
+    },
+    {
+      $sort: {
+        _id: 1,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        place_name: "$place_name.title",
+        count: 1,
+      },
+    },
+  ]);
+  return res.status(201).json(bookings);
+});
+
+export {
+  adminLogin,
+  adminInfo,
+  adminLogout,
+  dashboardCount,
+  monthlyIncome,
+  monthlyBookings,
+  placeBookings,
+};

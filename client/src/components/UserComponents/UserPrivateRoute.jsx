@@ -1,15 +1,19 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
 import { useContext } from "react";
 import LoadingSpinner from "../LoadingSpinner";
 
 const UserPrivateRoute = () => {
   const { user, ready } = useContext(UserContext);
-
+  const navigate = useNavigate()
   if (!ready) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner/>
   }
 
-  return user ? <Outlet /> : <Navigate to="/login" replace />;
+  if(ready){
+    return user ? <Outlet /> : navigate("/login");
+  }
+
+  
 };
 export default UserPrivateRoute;

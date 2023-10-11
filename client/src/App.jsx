@@ -25,6 +25,7 @@ import HostBookingsPage from './pages/HostPages/HostBookingsPage';
 import SuccessPage from './pages/Userpages/SuccessPage';
 import MessagePage from './pages/Userpages/MessagePage';
 import HostMessagePage from './pages/HostPages/HostMessagePage';
+import HostDashboard from './pages/HostPages/HostDashboard';
 
 
 const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
@@ -63,6 +64,7 @@ function App() {
             <Route path="/host/editplace/:id" element={<AddPlaces />} />
             <Route path="/host/bookings" element={<HostBookingsPage />} />
             <Route path="/host/message" element={<HostMessagePage />} />
+            <Route path="/host/dashboard" element={<HostDashboard />} />
           </Route>
 
           <Route path="/admin/login" element={<AdminLogin />} />

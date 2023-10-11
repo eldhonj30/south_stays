@@ -1,14 +1,17 @@
 import express from "express";
 import { hostAuth } from "../Middlewares/authMiddleware.js";
 import { photoUploader } from "../Middlewares/imageMiddleware.js";
-import {localVariables} from '../Middlewares/commonMiddleware.js'
+import { localVariables } from "../Middlewares/commonMiddleware.js";
 import {
   hostSignup,
   hostLogin,
   hostInfo,
   hostLogout,
   verifyOtp,
-  resentOtp
+  resentOtp,
+  tileData,
+  monthlyIncome,
+  monthlyBookings
 } from "../Controllers/hostControllers.js";
 
 import {
@@ -20,23 +23,26 @@ import {
   editPlace,
 } from "../Controllers/placeControllers.js";
 
-import { gethostBookings,confrmCheckout } from "../Controllers/bookingControllers.js";
+import {
+  gethostBookings,
+  confrmCheckout,
+} from "../Controllers/bookingControllers.js";
 
 const router = express.Router();
 
 // host login-signup routes
 
-router.post("/signup",localVariables, hostSignup);
+router.post("/signup", localVariables, hostSignup);
 router.post("/login", hostLogin);
 router.post("/logout", hostLogout);
-router.post('/otp-verify',verifyOtp) 
-router.post("/otp-resend",resentOtp);
+router.post("/otp-verify", verifyOtp);
+router.post("/otp-resend", resentOtp);
 
 router.get("/hostInfo", hostInfo);
 
 // host place related routes
 
-router.post("/upload-by-link",imageLinkUpload);
+router.post("/upload-by-link", imageLinkUpload);
 router.post(
   "/upload-photos",
   hostAuth,
@@ -44,10 +50,16 @@ router.post(
   imageUpload
 );
 router.post("/add-place", hostAuth, addPlace);
-router.get("/edit-place/:id",hostAuth, getPlace);
-router.put("/edit-place",hostAuth, editPlace);
+router.get("/edit-place/:id", hostAuth, getPlace);
+router.put("/edit-place", hostAuth, editPlace);
 router.get("/user-places", hostAuth, userPlaces);
-router.get("/bookings",hostAuth,gethostBookings);
-router.post("/confirm-checkout",hostAuth,confrmCheckout);
+router.get("/bookings", hostAuth, gethostBookings);
+router.post("/confirm-checkout", hostAuth, confrmCheckout);
+
+// host dashboard related routes
+
+router.get("/dashboard", hostAuth, tileData);
+router.get("/dashboard/bargraph", hostAuth, monthlyIncome);
+router.get("/dashboard/linegraph", hostAuth, monthlyBookings);
 
 export default router;

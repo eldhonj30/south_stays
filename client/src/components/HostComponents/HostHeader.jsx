@@ -87,7 +87,7 @@ const HostHeader = () => {
           </div>
           <div className="flex items-center">
             <Link
-              to="/"
+              to="/host/dashboard"
               className="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium"
             >
               Dashboard

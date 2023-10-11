@@ -7,7 +7,9 @@ import {
   adminInfo,
   adminLogout,
   dashboardCount,
-  bargraph,
+  monthlyBookings,
+  monthlyIncome,
+  placeBookings
 } from "../Controllers/adminControllers.js";
 import {
   getUserBookings,
@@ -21,7 +23,9 @@ router.post("/login", adminLogin);
 router.get("/admininfo", adminAuth, adminInfo);
 router.post("/logout", adminLogout);
 router.get("/dashboard/counts", adminAuth, dashboardCount);
-router.get("/dashboard/bargraph",adminAuth,bargraph);
+router.get("/dashboard/bargraph/income", adminAuth, monthlyIncome);
+router.get("/dashboard/bargraph/booking", adminAuth, monthlyBookings);
+router.get("/dashboard/piegraph/booking", adminAuth, placeBookings);
 
 router.get("/all-places", getAllPlaces);
 router.get("/all-users", adminAuth, allUsers);

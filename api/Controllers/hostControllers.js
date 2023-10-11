@@ -1,10 +1,12 @@
 import hostModel from "../Models/hostModel.js";
 import bcrypt from "bcryptjs";
+import moment from "moment";
 import asyncHandler from "express-async-handler";
 import hostToken from "../utils/hostToken.js";
 import jwt from "jsonwebtoken";
 import nodeMailer from "nodemailer";
 import { getOtp, getMsg } from "../utils/commonUtils.js";
+import BookingModel from "../Models/bookingModel.js";
 
 const bcryptSalt = await bcrypt.genSalt(10);
 
@@ -224,6 +226,127 @@ const hostBlockUnBlock = asyncHandler(async (req, res) => {
   }
 });
 
+const tileData = asyncHandler(async (req, res) => {
+  const { _id } = req.hostD;
+  try {
+    const summary = await BookingModel.aggregate([
+      {
+        $match: { owner: _id },
+      },
+      {
+        $group: {
+          _id: "$owner",
+          totalBookings: { $sum: 1 },
+          totalIncome: { $sum: "$price" },
+        },
+      },
+    ]);
+
+    const lastMonth = await BookingModel.aggregate([
+      {
+        $match: {
+          owner: _id,
+          checkIn: {
+            $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$owner",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    const todays = await BookingModel.find({
+      $and: [
+        { owner: _id },
+        { checkIn: new Date() },
+        { status: { $ne: "cancelled" } },
+      ],
+    }).countDocuments();
+
+    res.status(201).json({ summary, lastMonth, todays });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const monthlyIncome = asyncHandler(async (req, res) => {
+  const { _id } = req.hostD;
+  try {
+    const revenue = await BookingModel.aggregate([
+      {
+        $match: {
+          status: "Checked-out",
+          owner: _id,
+        },
+      },
+      {
+        $addFields: {
+          month: { $month: "$checkOut" },
+        },
+      },
+      {
+        $group: {
+          _id: { month: "$month" },
+          price_monthly: { $sum: "$price" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          month: "$_id.month",
+          price_monthly: 1,
+        },
+      },
+      {
+        $sort: {
+          month: 1,
+        },
+      },
+    ]);
+    return res.status(201).json(revenue);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const monthlyBookings = asyncHandler(async (req, res) => {
+  const { _id } = req.hostD;
+  const booking = await BookingModel.aggregate([
+    {
+      $match: {
+        owner: _id
+      },
+    },
+    {
+      $addFields: {
+        month: { $month: "$checkIn" },
+      },
+    },
+    {
+      $group: {
+        _id: { month: "$month" },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $sort: {
+        "_id.month": 1,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        month: "$_id.month",
+        count: 1,
+      },
+    },
+  ]);
+  return res.status(201).json(booking);
+});
+
 export {
   hostSignup,
   hostLogin,
@@ -233,4 +356,7 @@ export {
   resentOtp,
   allHosts,
   hostBlockUnBlock,
+  tileData,
+  monthlyIncome,
+  monthlyBookings
 };

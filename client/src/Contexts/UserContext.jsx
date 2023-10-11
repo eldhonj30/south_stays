@@ -8,6 +8,7 @@ export const UserContext = createContext({});
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [ready, setReady] = useState(false);
+  const [hReady, setHReady] = useState(false);
 
   const [host, setHost] = useState(null);
   const [admin, setAdmin] = useState(null);
@@ -24,15 +25,16 @@ export function UserContextProvider({ children }) {
         .then(({ data }) => {
            if (data) {
              setHost(data);
+             setHReady(true);
            } else {
              setHost(null);
+             setHReady(true);
              toast.error("You have been blocked,Please contact admin");
            }
-          setReady(true);
         })
         .catch((err) => {
           setHost(null)
-          setReady(true);
+          setHReady(true);
         });
     }
   }, [dep]);
@@ -56,16 +58,17 @@ export function UserContextProvider({ children }) {
           .then(({ data }) => {
             if (data) {
               setUser(data);
+              setReady(true);
             } else {
               setUser(null);
               toast.error("You have been blocked,Please contact admin");
             }
           })
           .catch((err) => {
+            setReady(true);
             setUser(null);
           });
       }
-      setReady(true);
         }
     
     return () => {};
@@ -73,7 +76,7 @@ export function UserContextProvider({ children }) {
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, ready, host, setHost, admin, setAdmin, socket, setSocket  }}>
+      value={{ user, setUser, ready, hReady, host, setHost, admin, setAdmin, socket, setSocket  }}>
       {children}
     </UserContext.Provider>
   );

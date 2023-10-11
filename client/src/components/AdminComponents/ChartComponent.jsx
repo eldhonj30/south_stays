@@ -4,11 +4,19 @@ import { Bar, Doughnut } from "react-chartjs-2";
 import axios from "axios";
 
 function ChartComponent() {
-  const [barData, setBarData] = useState([]);
+  const [income, setIncome] = useState([]);
+  const [booking,setBooking] = useState([]);
+  const [pieData,setPieData] = useState([])
 
   useEffect(() => {
-    axios.get("/admin/dashboard/bargraph").then(({ data }) => {
-      setBarData([...data]);
+    axios.get("/admin/dashboard/bargraph/income").then(({ data }) => {
+      setIncome([...data]);
+    });
+    axios.get('/admin/dashboard/bargraph/booking').then(({data}) => {
+      setBooking([...data])
+    })
+    axios.get("/admin/dashboard/piegraph/booking").then(({data}) => {
+      setPieData([...data])
     });
   }, []);
 
@@ -32,13 +40,17 @@ function ChartComponent() {
   };
 
   const chartData = {
-    labels: barData.map((item) => getMonthName(item.month)),
+    labels: income.map((item) => getMonthName(item.month)),
     datasets: [
       {
         label: "Revenue",
-        data: barData.map((item) => item.price_10_percent_monthly),
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
+        data: income.map((item) => item.price_10_percent_monthly),
+        borderWidth: 1,
+        barThickness: 30,
+      },
+      {
+        label: "Bookings",
+        data: booking.map((item) => item.count),
         borderWidth: 1,
         barThickness: 30,
       },
@@ -51,13 +63,29 @@ function ChartComponent() {
       },
     },
   };
+
+  const pieChartData = {
+    labels: pieData.map((item) => item.place_name),
+    datasets: [
+      {
+        label: "Count",
+        data: pieData.map((item) => item.count),
+        backgroundColor: ["rgba(43,63,229,0.8)", "rgba(250,192,19,0.8)","rgba(253,135,135,0.8)"],
+        borderRadius:5,
+      },
+    ],
+  };
+
   return (
     <div className="grid grid-cols-[2fr_1fr] gap-2">
       <div className="bg-white p-4 rounded-lg shadow-md">
-        <h2 className="fond-bold text-xl">Monthly Income</h2>
+        <h2 className="fond-bold text-xl mb-2">Monthly Income & Bookings</h2>
         <Bar data={chartData} options={options} />
       </div>
-      <div className="bg-white p-4 rounded-lg shadow-md">55</div>
+      <div className="bg-white p-4 rounded-lg shadow-md">
+        <h2 className="fond-bold text-xl mb-2">Place wise Bookings</h2>
+        <Doughnut data={pieChartData} />
+      </div>
     </div>
   );
 }
