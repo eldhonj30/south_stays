@@ -10,11 +10,10 @@ import connectDB from "./Config/dbConfig.js";
 import { Server } from "socket.io";
 import { notFound, errorHandler } from "./Middlewares/errorMiddleware.js";
 import { fileURLToPath } from "url";
-import { dirname } from "path";
+import path, { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
 dotenv.config();
 
 connectDB();
@@ -38,9 +37,18 @@ app.use("/host", hostRoutes);
 app.use("/admin", adminRoutes);
 app.use("/message", messageRoutes);
 
-app.get("/test", (req, res) => {
-  res.json("test ok");
-});
+if(process.env.NODE_ENV === 'production') {
+  const __dirname = path.resolve();
+  const basePath = path.dirname(__dirname);
+  app.use(express.static(path.join(basePath, 'client/dist')));
+
+  app.get('*', (req,res) => res.sendFile(path.resolve(basePath, 'client', 'dist', 'NotFound.html')))
+} else {
+
+  app.get("/test", (req, res) => {
+    res.json("test ok");
+  });
+}
 
 app.use(notFound);
 app.use(errorHandler);
