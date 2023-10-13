@@ -42,6 +42,21 @@ if(process.env.NODE_ENV === 'production') {
   const basePath = path.dirname(__dirname);
   app.use(express.static(path.join(basePath, 'client/dist')));
 
+  app.get("/*", function (req, res) {
+    const indexPath = path.join(basePath, "client/dist/index.html");
+
+    console.log("Index HTML Path:", indexPath);
+
+    res.sendFile(indexPath, function (err) {
+      if (err) {
+        console.error("Error sending index.html:", err);
+        res.status(500).send(err);
+      } else {
+        console.log("Index.html send successfully");
+      }
+    });
+  });
+
   app.get('*', (req,res) => res.sendFile(path.resolve(basePath, 'client', 'dist', 'NotFound.html')))
 } else {
 
@@ -49,6 +64,8 @@ if(process.env.NODE_ENV === 'production') {
     res.json("test ok");
   });
 }
+
+
 
 app.use(notFound);
 app.use(errorHandler);
