@@ -20,7 +20,7 @@ function PlaceDetails() {
     axios.get(`/guest/place-details/${id}`).then((response) => {
       setPlace(response.data);
     });
-  }, [place]);
+  }, []);
   if (!place) {
     return <LoadingSpinner />;
   }

@@ -37,15 +37,13 @@ app.use("/host", hostRoutes);
 app.use("/admin", adminRoutes);
 app.use("/message", messageRoutes);
 
-if(process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
   const basePath = path.dirname(__dirname);
-  app.use(express.static(path.join(basePath, 'client/dist')));
+  app.use(express.static(path.join(basePath, "client/dist")));
 
   app.get("/*", function (req, res) {
     const indexPath = path.join(basePath, "client/dist/index.html");
-
-    console.log("Index HTML Path:", indexPath);
 
     res.sendFile(indexPath, function (err) {
       if (err) {
@@ -56,16 +54,11 @@ if(process.env.NODE_ENV === 'production') {
       }
     });
   });
-
-  app.get('*', (req,res) => res.sendFile(path.resolve(basePath, 'client', 'dist', 'NotFound.html')))
 } else {
-
   app.get("/test", (req, res) => {
     res.json("test ok");
   });
 }
-
-
 
 app.use(notFound);
 app.use(errorHandler);
@@ -74,7 +67,7 @@ const server = app.listen(port, () =>
   console.log(`server started on port ${port}`)
 );
 
-// socket io initializatio
+// socket io initialization
 
 const io = new Server(server, {
   cors: {
@@ -86,7 +79,6 @@ const io = new Server(server, {
 let onlineUsers = [];
 
 io.on("connection", (socket) => {
-
   socket.on("addNewUser", (userId) => {
     !onlineUsers.some((user) => user.userId === userId) &&
       onlineUsers.push({
@@ -103,17 +95,17 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", (data) => {
     const user = onlineUsers.filter((user) => user.userId === data.to);
-    
+
     if (user.length > 0) {
-      io.to(user[0].socketId).emit("newMessage", data.message,data.from);
-      io.to(user[0].socketId).emit("updateList",data.from,data.chatId); 
+      io.to(user[0].socketId).emit("newMessage", data.message, data.from);
+      io.to(user[0].socketId).emit("updateList", data.from, data.chatId);
     }
   });
 
-  socket.on("updateUnread",(info) => {
+  socket.on("updateUnread", (info) => {
     const user = onlineUsers.filter((user) => user.userId === info._id);
     if (user.length > 0) {
       io.to(user[0].socketId).emit("notification");
     }
-  })
+  });
 });
