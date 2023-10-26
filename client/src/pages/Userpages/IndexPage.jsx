@@ -19,7 +19,7 @@ function IndexPage() {
         setPlaces(response.data);
       });
     }
-  }, [data, places]);
+  }, []);
 
   if (!places?.length) {
     return <LoadingSpinner />;
