@@ -52,7 +52,6 @@ export function UserContextProvider({ children }) {
            setReady(true);
         });
     } else {
-      if (url !== "login") {
         axios
           .get("/guest/guestinfo")
           .then(({ data }) => {
@@ -68,7 +67,6 @@ export function UserContextProvider({ children }) {
             setReady(true);
             setUser(null);
           });
-      }
         }
     
     return () => {};

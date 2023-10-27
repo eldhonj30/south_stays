@@ -42,6 +42,11 @@ export default function BookingWidget({ place }) {
     );
   }
 
+    function validatePhoneNumber(phoneNumber) {
+      const phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(phoneNumber);
+    }
+
   const availability = async () => {
     if (!user) {
       toast.error("Please login first");
@@ -55,6 +60,9 @@ export default function BookingWidget({ place }) {
     if (numberOfGuests == "" || name.trim() === "" || phone === "") {
       return toast.error("please fill out all fields");
     }
+
+    if(!validatePhoneNumber(phone)) return toast.error("Invalid phone number")
+  
     const { data } = await axios.post("/guest/place-available", {
       checkIn,
       checkOut,

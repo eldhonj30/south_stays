@@ -24,8 +24,18 @@ function Login() {
     return <LoadingSpinner />;
   }
 
+    function validateEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function validatePassword(password) {
+      return password.length >= 6;
+    }
+
   const handleLogin = async (ev) => {
     ev.preventDefault();
+       if(!validateEmail(email) && !validatePassword(password)) return toast.error("Invalid email or password")
     try {
       const { data } = await axios.post("/host/login", { email, password });
 

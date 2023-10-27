@@ -25,16 +25,29 @@ function LoginPage() {
     return <LoadingSpinner />;
   }
 
+  function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  function validatePassword(password) {
+    return password.length >= 6;
+  }
+
+
   const handleLogin = async (ev) => {
     ev.preventDefault();
-    try {
-      const { data } = await axios.post("/guest/auth", { email, password });
-      setUser(data);
-      toast.success("Validation Success");
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-      toast.error(err?.response?.data?.message);
+    if(validateEmail(email) && validatePassword(password)) {
+      try {
+        const { data } = await axios.post("/guest/auth", { email, password });
+        setUser(data);
+        toast.success("Validation Success");
+        navigate("/");
+      } catch (err) {
+        toast.error(err?.response?.data?.message);
+      }
+    } else {
+       return toast.error("Invalid email or password");
     }
   };
 

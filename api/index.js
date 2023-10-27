@@ -42,7 +42,7 @@ if (process.env.NODE_ENV === "production") {
   const basePath = path.dirname(__dirname);
   app.use(express.static(path.join(basePath, "client/dist")));
 
-  app.get("/*", function (req, res) {
+  app.get("*", function (req, res) {
     const indexPath = path.join(basePath, "client/dist/index.html");
 
     res.sendFile(indexPath, function (err) {
